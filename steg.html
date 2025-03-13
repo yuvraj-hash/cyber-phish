@@ -1,0 +1,1080 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steganography Tool - NetShield Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono&display=swap">
+  <style>
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #4361ee;
+      --accent-secondary: #3a0ca3;
+      --accent-tertiary: #7209b7;
+      --border-color: #dee2e6;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --header-text: #ffffff;
+      --nav-bg: #ffffff;
+      --nav-text: #212529;
+      --nav-active: #4361ee;
+      --nav-hover-bg: #f8f9fa;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --accent-primary: #4cc9f0;
+      --accent-secondary: #7209b7;
+      --accent-tertiary: #3a0ca3;
+      --border-color: #495057;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #3a0ca3, #7209b7);
+      --header-text: #ffffff;
+      --nav-bg: #1e1e1e;
+      --nav-text: #e9ecef;
+      --nav-active: #4cc9f0;
+      --nav-hover-bg: #2d2d2d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(15deg);
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      margin-top: 70px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 70px;
+      z-index: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .nav-links li a.active {
+      color: var(--nav-active);
+      border-bottom: 3px solid var(--nav-active);
+    }
+
+    .main-container {
+      flex: 1;
+      padding: 2rem 0;
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .page-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-header h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 0.5rem;
+      background: linear-gradient(90deg, var(--accent-primary), var(--accent-tertiary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+    }
+
+    .page-header p {
+      font-size: 1.1rem;
+      color: var(--text-secondary);
+    }
+
+    .card {
+      background-color: var(--card-bg);
+      border-radius: 12px;
+      box-shadow: var(--card-shadow);
+      border: none;
+      overflow: hidden;
+      margin-bottom: 2rem;
+    }
+
+    .nav-tabs {
+      border-bottom: none;
+      background-color: var(--bg-secondary);
+      border-radius: 12px 12px 0 0;
+      padding: 0.5rem 0.5rem 0;
+    }
+
+    .nav-tabs .nav-link {
+      border: none;
+      border-radius: 8px 8px 0 0;
+      padding: 1rem 1.5rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      position: relative;
+      transition: all 0.3s ease;
+    }
+
+    .nav-tabs .nav-link:hover:not(.active) {
+      background-color: rgba(0, 0, 0, 0.05);
+    }
+
+    .nav-tabs .nav-link.active {
+      color: var(--accent-primary);
+      background-color: var(--card-bg);
+      border-top: 3px solid var(--accent-primary);
+    }
+
+    .tab-content {
+      padding: 2rem;
+    }
+
+    h2 {
+      font-size: 1.75rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      color: var(--accent-primary);
+    }
+
+    .alert {
+      border-radius: 8px;
+      padding: 1.25rem;
+      margin-bottom: 1.5rem;
+      border: none;
+      font-size: 1rem;
+      position: relative;
+    }
+
+    .alert-info {
+      background-color: rgba(76, 201, 240, 0.1);
+      border-left: 4px solid var(--info);
+      color: var(--text-primary);
+    }
+
+    .alert-danger {
+      background-color: rgba(230, 57, 70, 0.1);
+      border-left: 4px solid var(--danger);
+      color: var(--text-primary);
+    }
+
+    .form-label {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+      color: var(--text-primary);
+    }
+
+    .form-control {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      transition: border-color 0.3s, box-shadow 0.3s;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent-primary);
+      box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.25);
+    }
+
+    textarea.form-control {
+      min-height: 150px;
+      font-family: 'Roboto Mono', monospace;
+      resize: vertical;
+    }
+
+    .btn {
+      border-radius: 8px;
+      padding: 0.75rem 1.5rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .btn::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(255, 255, 255, 0.2), rgba(255, 255, 255, 0));
+      transition: opacity 0.3s;
+      opacity: 0;
+    }
+
+    .btn:hover::after {
+      opacity: 1;
+    }
+
+    .btn:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(to right, var(--accent-primary), var(--accent-secondary));
+      border: none;
+      color: white;
+      box-shadow: 0 4px 10px rgba(67, 97, 238, 0.3);
+    }
+
+    .btn-primary:hover {
+      box-shadow: 0 6px 15px rgba(67, 97, 238, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .btn-success {
+      background: linear-gradient(to right, var(--success), #2b9348);
+      border: none;
+      color: white;
+      box-shadow: 0 4px 10px rgba(56, 176, 0, 0.3);
+    }
+
+    .btn-success:hover {
+      box-shadow: 0 6px 15px rgba(56, 176, 0, 0.4);
+      transform: translateY(-2px);
+    }
+
+    .file-upload {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 2rem;
+      border: 2px dashed var(--border-color);
+      border-radius: 8px;
+      background-color: var(--bg-secondary);
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+      cursor: pointer;
+    }
+
+    .file-upload:hover {
+      border-color: var(--accent-primary);
+      background-color: rgba(67, 97, 238, 0.05);
+    }
+
+    .file-upload input {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      opacity: 0;
+      cursor: pointer;
+    }
+
+    .file-upload i {
+      font-size: 2.5rem;
+      color: var(--accent-primary);
+      margin-bottom: 1rem;
+    }
+
+    .file-upload p {
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .file-upload span {
+      font-size: 0.9rem;
+      color: var(--text-secondary);
+    }
+
+    .binary, .binary-decode {
+      background-color: var(--bg-secondary);
+      border-radius: 8px;
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      border-left: 4px solid var(--accent-primary);
+    }
+
+    .binary h3, .binary-decode h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-primary);
+    }
+
+    .canvas-container {
+      width: 100%;
+      margin-bottom: 2rem;
+      border-radius: 8px;
+      overflow: hidden;
+      box-shadow: var(--card-shadow);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .canvas-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    .canvas-container::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.05));
+      pointer-events: none;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .canvas-container:hover::after {
+      opacity: 1;
+    }
+
+    .canvas-container canvas {
+      display: block;
+      max-width: 100%;
+      height: auto;
+    }
+
+    .image-container {
+      margin-bottom: 2rem;
+    }
+
+    .image-container h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-primary);
+    }
+
+    .image-container h3 small {
+      font-size: 0.8rem;
+      font-weight: normal;
+      color: var(--text-secondary);
+      display: inline-block;
+      margin-left: 0.5rem;
+    }
+
+    .loader {
+      width: 48px;
+      height: 48px;
+      border: 5px solid var(--bg-secondary);
+      border-bottom-color: var(--accent-primary);
+      border-radius: 50%;
+      display: block;
+      margin: 2rem auto;
+      box-sizing: border-box;
+      animation: rotation 1s linear infinite;
+      display: none;
+    }
+
+    @keyframes rotation {
+      0% {
+        transform: rotate(0deg);
+      }
+      100% {
+        transform: rotate(360deg);
+      }
+    }
+
+    .copy-tooltip {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: var(--accent-primary);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.9rem;
+      z-index: 1000;
+      animation: fadeInOut 2s ease forwards;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    @keyframes fadeInOut {
+      0% { opacity: 0; transform: translate(-50%, 20px); }
+      20% { opacity: 1; transform: translate(-50%, 0); }
+      80% { opacity: 1; transform: translate(-50%, 0); }
+      100% { opacity: 0; transform: translate(-50%, -20px); }
+    }
+
+    footer {
+      background-color: var(--bg-secondary);
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--bg-tertiary);
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+      background-color: var(--accent-primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    footer a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--accent-secondary);
+    }
+
+    /* Animation effects */
+    .fadeIn {
+      animation: fadeIn 0.5s ease forwards;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive styles */
+    @media (max-width: 992px) {
+      .nav-links {
+        flex-wrap: wrap;
+      }
+      
+      .nav-links li a {
+        padding: 0.5rem 0.75rem;
+        font-size: 0.9rem;
+      }
+      
+      .tab-content {
+        padding: 1.5rem;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .logo h1 {
+        font-size: 1.25rem;
+      }
+      
+      nav {
+        margin-top: 60px;
+      }
+      
+      .nav-links {
+        overflow-x: auto;
+        justify-content: flex-start;
+        padding-bottom: 0.5rem;
+      }
+      
+      .main-container {
+        padding: 1.5rem 1rem;
+      }
+      
+      h2 {
+        font-size: 1.5rem;
+      }
+      
+      .page-header h1 {
+        font-size: 2rem;
+      }
+    }
+
+    /* Canvas tooltip */
+    .canvas-tooltip {
+      position: absolute;
+      bottom: 1rem;
+      left: 50%;
+      transform: translateX(-50%);
+      background-color: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 0.5rem 1rem;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      opacity: 0;
+      transition: opacity 0.3s;
+      pointer-events: none;
+    }
+
+    .canvas-container:hover .canvas-tooltip {
+      opacity: 1;
+    }
+
+    /* Security badge */
+    .security-badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      background-color: rgba(56, 176, 0, 0.1);
+      color: var(--success);
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-top: 1rem;
+    }
+
+    .security-badge i {
+      margin-right: 0.25rem;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <h1>NetShield Pro</h1>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="index.html">URL Detection</a></li>
+      <li><a href="email.html">Email Security</a></li>
+      <li><a href="steg.html" class="active">Steganography</a></li>
+      <li><a href="socio.html">Social Engg</a></li>
+      <li><a href="pass.html">Password Vault</a></li>
+      <li><a href="ssl.html">SSL/TLS</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    <div class="container">
+      <div class="page-header">
+        <h1>Image Steganography</h1>
+        <p>Hide your messages in plain sight - Encode secret text within images</p>
+      </div>
+
+      <div class="card">
+        <ul class="nav nav-tabs" id="steganographyTabs" role="tablist">
+          <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="encode-tab" data-bs-toggle="tab" data-bs-target="#encode" type="button" role="tab" aria-controls="encode" aria-selected="true">
+              <i class="fas fa-lock"></i> Encode
+            </button>
+          </li>
+          <li class="nav-item" role="presentation">
+            <button class="nav-link" id="decode-tab" data-bs-toggle="tab" data-bs-target="#decode" type="button" role="tab" aria-controls="decode" aria-selected="false">
+              <i class="fas fa-unlock"></i> Decode
+            </button>
+          </li>
+        </ul>
+
+        <div class="tab-content" id="steganographyTabsContent">
+          <div class="tab-pane fade show active" id="encode" role="tabpanel" aria-labelledby="encode-tab">
+            <h2><i class="fas fa-shield-alt"></i> Encode Message</h2>
+            
+            <div class="alert alert-info" role="alert">
+              <i class="fas fa-info-circle"></i> <strong>How it works:</strong>
+              <ol class="mb-0 mt-2">
+                <li>Choose an image to hide your message in</li>
+                <li>Enter the secret text you want to hide</li>
+                <li>Click the Encode button and save the resulting image</li>
+              </ol>
+              <p class="mt-2 mb-0"><strong>Note:</strong> Larger messages require larger images. All processing happens in your browser - no data is sent to any server.</p>
+            </div>
+
+            <div class="alert alert-danger error-message" style="display: none;">
+              <i class="fas fa-exclamation-triangle"></i> <span></span>
+            </div>
+
+            <form>
+  <div class="mb-4">
+    <label class="file-upload" for="baseFile">
+      <input type="file" id="baseFile" name="baseFile" accept="image/png, image/jpeg" onchange="previewEncodeImage()">
+      <i class="fas fa-cloud-upload-alt"></i>
+      <p>Choose an image file</p>
+      <span>or drag and drop here</span>
+    </label>
+    <div id="uploadMessage" style="margin-top: 10px; font-weight: bold;"></div>
+  </div>
+</form>
+
+              <div class="mb-4">
+                <label for="secretMessage" class="form-label">Secret Message</label>
+                <textarea class="form-control message" id="secretMessage" rows="4" placeholder="Enter your secret message here..."></textarea>
+              </div>
+
+              <div class="d-grid">
+                <button type="button" class="btn btn-success encode" onclick="encodeMessage()">
+                  <i class="fas fa-lock"></i> Encode Message
+                </button>
+              </div>
+            </form>
+
+            <div class="loader"></div>
+
+            <div class="binary" style="display: none;">
+              <h3><i class="fas fa-code"></i> Binary Representation</h3>
+              <textarea class="form-control" readonly></textarea>
+              <div class="security-badge">
+                <i class="fas fa-shield-alt"></i> Bit-level encryption
+              </div>
+            </div>
+
+            <div class="row images" style="display: none;">
+              <div class="col-md-4 image-container original" style="display: none;">
+                <h3><i class="fas fa-image"></i> Original Image</h3>
+                <div class="canvas-container">
+                  <canvas></canvas>
+                </div>
+              </div>
+              
+              <div class="col-md-4 image-container nulled" style="display: none;">
+                <h3><i class="fas fa-broom"></i> Normalized Image</h3>
+                <div class="canvas-container">
+                  <canvas></canvas>
+                </div>
+              </div>
+              
+              <div class="col-md-4 image-container message" style="display: none;">
+                <h3><i class="fas fa-download"></i> Output Image <small>(Click to save)</small></h3>
+                <div class="canvas-container">
+                  <canvas></canvas>
+                  <div class="canvas-tooltip">Click to download</div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="tab-pane fade" id="decode" role="tabpanel" aria-labelledby="decode-tab">
+            <h2><i class="fas fa-eye"></i> Decode Hidden Message</h2>
+            
+            <div class="alert alert-info" role="alert">
+              <i class="fas fa-info-circle"></i> <strong>Reveal the secret:</strong>
+              <ol class="mb-0 mt-2">
+                <li>Select an image that contains a hidden message</li>
+                <li>Click the Decode button to extract the message</li>
+              </ol>
+              <p class="mt-2 mb-0"><strong>Privacy assured:</strong> Your image and the hidden message remain on your device - nothing is transmitted over the internet.</p>
+            </div>
+
+            <div class="alert alert-danger error-message" style="display: none;">
+              <i class="fas fa-exclamation-triangle"></i> <span></span>
+            </div>
+
+            <form>
+             <div class="mb-4">
+  <label class="file-upload" for="decodeFile">
+    <input type="file" id="decodeFile" name="decodeFile" accept="image/png, image/jpeg" onchange="previewDecodeImage()">
+    <i class="fas fa-cloud-upload-alt"></i>
+    <p>Choose an image with hidden data</p>
+    <span>or drag and drop here</span>
+  </label>
+  <div id="decodeUploadMessage" style="margin-top: 10px; font-weight: bold;"></div>
+</div>
+
+              <div class="d-grid">
+                <button type="button" class="btn btn-success decode" onclick="decodeMessage()">
+                  <i class="fas fa-unlock"></i> Decode Message
+                </button>
+              </div>
+            </form>
+
+            <div class="loader"></div>
+
+            <div class="binary-decode" style="display: none;">
+              <h3><i class="fas fa-comment-alt"></i> Hidden Message</h3>
+              <textarea class="form-control message" rows="4" readonly placeholder="The decoded message will appear here..."></textarea>
+              <div class="d-flex justify-content-end mt-2">
+                <button class="btn btn-sm btn-primary copy-btn">
+                  <i class="fas fa-copy"></i> Copy Text
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-md-6 mx-auto image-container decode" style="display: none;">
+                <h3><i class="fas fa-image"></i> Encoded Image</h3>
+                <div class="canvas-container">
+                  <canvas></canvas>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="social-icons">
+        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+      </div>
+      <p>&copy; 2025 by <a href="#">NetShield Pro</a> | Stay Safe, Stay Secure.</p>
+      <p><small>Your privacy matters - all operations are performed locally in your browser</small></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Theme Toggle
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+  const currentTheme = root.getAttribute('data-theme');
+  const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+  root.setAttribute('data-theme', newTheme);
+  
+  // Update icon
+  themeToggle.innerHTML = newTheme === 'light' ? 
+    '<i class="fas fa-moon"></i>' : 
+    '<i class="fas fa-sun"></i>';
+});
+
+// Check user preference
+if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+  root.setAttribute('data-theme', 'dark');
+  themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+}
+
+// Helper functions for encoding/decoding
+function textToBinary(text) {
+    return text.split('').map(char => char.charCodeAt(0).toString(2).padStart(8, '0')).join('');
+}
+
+function binaryToText(binary) {
+    return binary.match(/.{1,8}/g)?.map(byte => String.fromCharCode(parseInt(byte, 2))).join('') || '';
+}
+
+function previewEncodeImage() {
+  const fileInput = document.getElementById('baseFile');
+  const uploadMessage = document.getElementById('uploadMessage');
+
+  if (fileInput.files.length > 0) {
+    const file = fileInput.files[0];
+    const fileName = file.name;
+    uploadMessage.innerHTML = `File uploaded: ${fileName}`;
+    
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      const img = new Image();
+      img.onload = function() {
+        const originalCanvas = document.querySelector('#encode .original canvas');
+        const originalCtx = originalCanvas.getContext('2d');
+        
+        originalCanvas.width = img.width;
+        originalCanvas.height = img.height;
+        originalCtx.drawImage(img, 0, 0);
+        
+        document.querySelector('#encode .original').style.display = 'block';
+      };
+      img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+function previewDecodeImage() {
+  const fileInput = document.getElementById('decodeFile');
+  const file = fileInput.files[0];
+  
+  if (!file) return;
+  
+  // Add upload message display
+  let uploadMessageElement = document.getElementById('decodeUploadMessage');
+  
+  // Create the message element if it doesn't exist
+  if (!uploadMessageElement) {
+    uploadMessageElement = document.createElement('div');
+    uploadMessageElement.id = 'decodeUploadMessage';
+    uploadMessageElement.style.marginTop = '10px';
+    uploadMessageElement.style.fontWeight = 'bold';
+    
+    // Insert after the file upload label
+    const fileUploadLabel = document.querySelector('#decode .file-upload');
+    fileUploadLabel.parentNode.insertBefore(uploadMessageElement, fileUploadLabel.nextSibling);
+  }
+  
+  uploadMessageElement.innerHTML = `File uploaded: ${file.name}`;
+  
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    const img = new Image();
+    img.onload = function() {
+      const decodeCanvas = document.querySelector('#decode .decode canvas');
+      const decodeCtx = decodeCanvas.getContext('2d');
+      
+      decodeCanvas.width = img.width;
+      decodeCanvas.height = img.height;
+      decodeCtx.drawImage(img, 0, 0);
+      
+      document.querySelector('#decode .decode').style.display = 'block';
+    };
+    img.src = e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function encodeMessage() {
+    const file = document.getElementById('baseFile').files[0];
+    const message = document.getElementById('secretMessage').value;
+
+    if (!file) {
+        alert('Please select an image first');
+        return;
+    }
+    if (!message) {
+        alert('Please enter a message to hide');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+            const binaryMessage = textToBinary(message);
+            const messageLength = binaryMessage.length.toString(2).padStart(32, '0');
+
+            if (binaryMessage.length + 32 > data.length / 4) {
+                alert('Message is too large for this image');
+                return;
+            }
+
+            // Store message length in the first 32 bits
+            for (let i = 0; i < 32; i++) {
+                data[i * 4] = (data[i * 4] & 0xFE) | parseInt(messageLength[i]);
+            }
+
+            // Encode message bits
+            for (let i = 0; i < binaryMessage.length; i++) {
+                data[(i + 32) * 4] = (data[(i + 32) * 4] & 0xFE) | parseInt(binaryMessage[i]);
+            }
+
+            ctx.putImageData(imageData, 0, 0);
+
+            const link = document.createElement('a');
+            link.download = 'encoded_image.png';
+            link.href = canvas.toDataURL('image/png');
+            link.click();
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+function decodeMessage() {
+    const file = document.getElementById('decodeFile').files[0];
+
+    if (!file) {
+        alert('Please select an image to decode');
+        return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+        const img = new Image();
+        img.onload = function() {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx.drawImage(img, 0, 0);
+
+            const imageData = ctx.getImageData(0, 0, canvas.width, canvas.height);
+            const data = imageData.data;
+
+            // Read message length from the first 32 bits
+            let lengthBits = '';
+            for (let i = 0; i < 32; i++) {
+                lengthBits += (data[i * 4] & 1);
+            }
+
+            const messageLength = parseInt(lengthBits, 2);
+            if (isNaN(messageLength) || messageLength <= 0) {
+                alert('No valid message detected');
+                return;
+            }
+
+            let binaryMessage = '';
+            for (let i = 0; i < messageLength; i++) {
+                binaryMessage += (data[(i + 32) * 4] & 1);
+            }
+
+            const message = binaryToText(binaryMessage);
+            if (message) {
+                alert('Decoded message: ' + message);
+            } else {
+                alert('No valid message detected');
+            }
+        };
+        img.src = e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
+// Helper function to display errors
+function showError(tab, message) {
+  const errorElement = document.querySelector(`${tab} .error-message`);
+  errorElement.querySelector('span').textContent = message;
+  errorElement.style.display = 'block';
+}
+
+// Initialize theme based on user preference
+document.addEventListener('DOMContentLoaded', () => {
+  const prefersDarkMode = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+  if (prefersDarkMode) {
+    root.setAttribute('data-theme', 'dark');
+    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+  }
+});
+</script>
+</body>
+</html>

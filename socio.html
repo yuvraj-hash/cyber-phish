@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Social Engineering Defense Guide</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono&display=swap">
+  <style>
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #4361ee;
+      --accent-secondary: #3a0ca3;
+      --accent-tertiary: #7209b7;
+      --border-color: #dee2e6;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --header-text: #ffffff;
+      --nav-bg: #ffffff;
+      --nav-text: #212529;
+      --nav-active: #4361ee;
+      --nav-hover-bg: #f8f9fa;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --accent-primary: #4cc9f0;
+      --accent-secondary: #7209b7;
+      --accent-tertiary: #3a0ca3;
+      --border-color: #495057;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #3a0ca3, #7209b7);
+      --header-text: #ffffff;
+      --nav-bg: #1e1e1e;
+      --nav-text: #e9ecef;
+      --nav-active: #4cc9f0;
+      --nav-hover-bg: #2d2d2d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(15deg);
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      margin-top: 70px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 70px;
+      z-index: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .nav-links li a.active {
+      color: var(--nav-active);
+      border-bottom: 3px solid var(--nav-active);
+    }
+
+    .main-container {
+      flex: 1;
+      padding: 2rem 0;
+      max-width: 850px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      box-shadow: var(--card-shadow);
+    }
+
+    .section h2 {
+      margin-bottom: 1rem;
+    }
+
+    .section p, .section ul {
+      margin-bottom: 1rem;
+    }
+
+    .example-box {
+      background-color: var(--bg-secondary);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .example-box strong {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .button-container {
+      text-align: center;
+    }
+
+    button {
+      background: linear-gradient(135deg, #007bff, #0056b3);
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 25px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #0056b3, #003f7f);
+      transform: scale(1.05);
+    }
+
+    .overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1000;
+    }
+
+    .popup {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background: var(--card-bg);
+      border-radius: 8px;
+      padding: 2rem;
+      width: 80%;
+      max-width: 400px;
+      z-index: 1001;
+      box-shadow: var(--card-shadow);
+    }
+
+    .popup h2 {
+      margin-bottom: 1rem;
+    }
+
+    .popup p {
+      margin-bottom: 1rem;
+    }
+
+    .popup button {
+      display: block;
+      margin: 0 auto;
+    }
+
+    footer {
+      background-color: var(--bg-secondary);
+      padding: 2rem 0;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .social-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background-color: var(--bg-tertiary);
+      color: var(--text-secondary);
+      transition: all 0.3s ease;
+    }
+
+    .social-icon:hover {
+      background-color: var(--accent-primary);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    footer p {
+      margin-bottom: 0.5rem;
+      color: var(--text-secondary);
+    }
+
+    footer a {
+      color: var(--accent-primary);
+      text-decoration: none;
+      font-weight: 500;
+      transition: color 0.3s;
+    }
+
+    footer a:hover {
+      color: var(--accent-secondary);
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <h1>NetShield Pro</h1>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <nav>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="index.html">URL Detection</a></li>
+      <li><a href="email.html">Email Security</a></li>
+      <li><a href="steg.html">Steganography</a></li>
+      <li><a href="socio.html" class="active">Social Engg</a></li>
+      <li><a href="pass.html">Password Vault</a></li>
+      <li><a href="ssl.html">SSL/TLS</a></li>
+    </ul>
+  </nav>
+
+  <div class="main-container">
+    <div class="container">
+      <div class="section">
+        <h2>What is Social Engineering?</h2>
+        <p>Social engineering is a type of cyberattack that manipulates individuals into divulging confidential information through deceitful tactics and psychological manipulation.</p>
+      </div>
+
+      <div class="section">
+        <h2>Real-Life Examples of Social Engineering Attacks</h2>
+        <div class="example-box">
+          <strong>Phishing Email</strong>
+          <p>A hacker sends an email impersonating a bank and requests the user to update their account information. The email appears legitimate, but it's a trap to steal personal details.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Spear Phishing</strong>
+          <p>In spear phishing, the attacker targets a specific individual by using personal information to appear more convincing, often from social media platforms.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Baiting</strong>
+          <p>Attackers leave a USB drive labeled "confidential" in a public place, hoping someone will plug it into their computer and infect it with malware.</p>
+        </div>
+
+        <div class="example-box">
+          <strong>Pretexting</strong>
+          <p>In pretexting, attackers impersonate trusted individuals or organizations to obtain sensitive information from the target under false pretenses.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2>Guidelines for Staying Safe</h2>
+        <ul>
+          <li>Always verify the sender’s identity before sharing any sensitive information.</li>
+          <li>Be wary of urgent requests, especially those that pressure you into immediate action.</li>
+          <li>Hover over links to check their legitimacy before clicking on them.</li>
+          <li>Enable two-factor authentication wherever possible to secure your accounts.</li>
+          <li>Never download attachments or software from unknown sources.</li>
+        </ul>
+      </div>
+
+      <div class="button-container">
+        <button id="learnMore">Pro Tip</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay"></div>
+  <div class="popup" id="popup">
+    <h2>Additional Tips</h2>
+    <p>Always trust your instincts. If something feels suspicious, verify it before taking any action.</p>
+    <button id="closePopup">Close</button>
+  </div>
+
+  <footer>
+    <div class="footer-content">
+      <div class="social-icons">
+        <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+        <a href="#" class="social-icon"><i class="fab fa-linkedin"></i></a>
+      </div>
+      <p>&copy; 2025 by <a href="#">NetShield Pro</a> | Stay Safe, Stay Secure.</p>
+      <p><small>Your privacy matters - all operations are performed locally in your browser</small></p>
+    </div>
+  </footer>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/js/bootstrap.bundle.min.js"></script>
+  <script>
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = root.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      root.setAttribute('data-theme', newTheme);
+
+      // Update icon
+      themeToggle.innerHTML = newTheme === 'light' ? 
+        '<i class="fas fa-moon"></i>' : 
+        '<i class="fas fa-sun"></i>';
+    });
+
+    // Check user preference
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+      root.setAttribute('data-theme', 'dark');
+      themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+    }
+
+    const learnMoreBtn = document.getElementById('learnMore');
+    const overlay = document.getElementById('overlay');
+    const popup = document.getElementById('popup');
+    const closePopupBtn = document.getElementById('closePopup');
+
+    learnMoreBtn.addEventListener('click', () => {
+      overlay.style.display = 'block';
+      popup.style.display = 'block';
+    });
+
+    closePopupBtn.addEventListener('click', () => {
+      overlay.style.display = 'none';
+      popup.style.display = 'none';
+    });
+  </script>
+</body>
+</html>

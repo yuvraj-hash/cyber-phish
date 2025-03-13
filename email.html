@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetShield Pro - Advanced Phishing Detection</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono&display=swap">
+
+   <style>
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #4361ee;
+      --accent-secondary: #3a0ca3;
+      --accent-tertiary: #7209b7;
+      --border-color: #dee2e6;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --header-text: #ffffff;
+      --nav-bg: #ffffff;
+      --nav-text: #212529;
+      --nav-active: #4361ee;
+      --nav-hover-bg: #f8f9fa;
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --primary-light: #6c8fff;
+      --shadow: rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --transition: all 0.3s ease;
+      --light-color: #f8f9fa;
+      --dark-color: #1e1e1e;
+      --primary-gradient: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --accent-primary: #4cc9f0;
+      --accent-secondary: #7209b7;
+      --accent-tertiary: #3a0ca3;
+      --border-color: #495057;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #3a0ca3, #7209b7);
+      --header-text: #ffffff;
+      --nav-bg: #1e1e1e;
+      --nav-text: #e9ecef;
+      --nav-active: #4cc9f0;
+      --nav-hover-bg: #2d2d2d;
+      --primary: #4cc9f0;
+      --secondary: #7209b7;
+      --primary-light: #7dd1f3;
+      --shadow: rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --transition: all 0.3s ease;
+      --light-color: #f8f9fa;
+      --dark-color: #1e1e1e;
+      --primary-gradient: linear-gradient(135deg, #4cc9f0, #7209b7);
+      --primary-color: #4cc9f0;
+      --secondary-color: #7209b7;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .main-header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+      gap: 2rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      padding: 0; /* Remove padding to avoid distortion */ 
+    }
+
+     .theme-toggle i {
+    font-size: 18px;         /* Icon size */
+    margin: 0;              /* Remove margin */
+    line-height: 1;         /* Normalize line height */
+    transform: translateY(-0.5px); /* Lift icon slightly */
+}
+
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(15deg);
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      margin-top: 70px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 70px;
+      z-index: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .nav-links li a.active {
+      color: var(--nav-active);
+      border-bottom: 3px solid var(--nav-active);
+    }
+
+         /* Enhanced Navigation Tabs */
+.nav-tabs {
+  border-bottom: none;
+  margin-bottom: 30px;
+  display: flex;
+  overflow: hidden;
+  border-radius: var(--border-radius-lg);
+  box-shadow: var(--shadow-md);
+}
+
+.nav-tabs > li {
+  flex: 1;
+}
+
+.nav-tabs > li > a {
+  color: var(--primary-color);
+  font-weight: 600;
+  font-size: 1.2rem;
+  padding: 18px 0;
+  text-align: center;
+  border: none !important;
+  background: var(--light-color);
+  margin: 0;
+  transition: all 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+      /* Content Wrapper */
+    .content-wrapper {
+      padding-top: 1px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+   /* Premium Header Styles */
+.page-header {
+    position: relative;
+    background: linear-gradient(135deg, #03071e, #370617, #6a040f, #9d0208);
+    color: white;
+    padding: 3.5rem 1rem 3rem;
+    overflow: hidden;
+    margin-bottom: 2.5rem;
+    border-radius: 0 0 30px 30px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25);
+}
+
+/* Animated Background Elements */
+.animated-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.cyber-grid {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        linear-gradient(to right, rgba(255,255,255,0.1) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(255,255,255,0.1) 1px, transparent 1px);
+    background-size: 30px 30px;
+    transform: perspective(500px) rotateX(60deg);
+    transform-origin: center top;
+    animation: gridMove 20s linear infinite;
+}
+
+.floating-particles {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glow-effect {
+    position: absolute;
+    top: -50%;
+    left: -20%;
+    width: 140%;
+    height: 200%;
+    background: radial-gradient(
+        circle at center,
+        rgba(220, 38, 38, 0.4) 0%,
+        rgba(124, 58, 237, 0.2) 30%,
+        rgba(0, 0, 0, 0) 70%
+    );
+    opacity: 0.7;
+    mix-blend-mode: overlay;
+    animation: glowPulse 8s ease-in-out infinite alternate;
+}
+
+/* Header Content Styling */
+.header-content {
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+/* Icon Styling with Rings */
+.icon-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+.icon-container i {
+    color: #fff;
+    font-size: 3.5rem;
+    z-index: 2;
+    animation: iconPulse 2s ease-in-out infinite alternate;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.8);
+}
+
+.icon-rings {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.ring {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    border-radius: 50%;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    transform: translate(-50%, -50%);
+}
+
+.ring1 {
+    width: 70px;
+    height: 70px;
+    animation: ringPulse 3s infinite;
+}
+
+.ring2 {
+    width: 90px;
+    height: 90px;
+    animation: ringPulse 3s infinite 1s;
+}
+
+.ring3 {
+    width: 110px;
+    height: 110px;
+    animation: ringPulse 3s infinite 2s;
+}
+
+/* Text Container Styling */
+.text-container {
+    flex-grow: 1;
+    text-align: left;
+}
+
+.glitch-text {
+    position: relative;
+    font-size: 3.2rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin: 0;
+    animation: textShadowPulse 5s infinite;
+}
+
+.glitch-text::before,
+.glitch-text::after {
+    content: attr(data-text);
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.glitch-text::before {
+    color: #ff0000;
+    animation: glitch-animation 3s infinite linear alternate-reverse;
+}
+
+.glitch-text::after {
+    color: #00ffff;
+    animation: glitch-animation 2s infinite linear alternate-reverse;
+}
+
+.scanner-bar {
+    height: 4px;
+    background: linear-gradient(to right, transparent, #ff3e3e, #ff3e3e, transparent);
+    margin: 16px 0;
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+}
+
+.scanner-bar::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 50%;
+    height: 100%;
+    background: linear-gradient(to right, transparent, rgba(255, 255, 255, 0.8), transparent);
+    animation: scannerMove 2s ease-in-out infinite;
+}
+
+.header-tagline {
+    font-size: 1.4rem;
+    margin: 1rem 0 1.5rem;
+    font-weight: 400;
+    opacity: 0.9;
+    animation: fadeInUp 1s ease-out 0.5s both;
+}
+
+/* Security Stats Bar */
+.security-stats {
+    display: flex;
+    gap: 2rem;
+    margin-top: 1.5rem;
+}
+
+.stat {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.stat-value {
+    font-size: 1.8rem;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 10px rgba(255, 255, 255, 0.5);
+}
+
+.stat-label {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    margin-top: 5px;
+}
+
+/* Animations */
+@keyframes textShadowPulse {
+    0% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+    50% {
+        text-shadow: 0 0 20px rgba(255, 255, 255, 0.8), 0 0 30px rgba(255, 62, 62, 0.6);
+    }
+    100% {
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+}
+
+@keyframes glitch-animation {
+    0% {
+        clip-path: inset(80% 0 0 0);
+        transform: translate(-1px, 1px);
+    }
+    20% {
+        clip-path: inset(10% 0 60% 0);
+        transform: translate(1px, -1px);
+    }
+    40% {
+        clip-path: inset(50% 0 30% 0);
+        transform: translate(-1px, -1px);
+    }
+    60% {
+        clip-path: inset(30% 0 70% 0);
+        transform: translate(1px, 1px);
+    }
+    80% {
+        clip-path: inset(70% 0 10% 0);
+        transform: translate(-1px, 1px);
+    }
+    100% {
+        clip-path: inset(0 0 90% 0);
+        transform: translate(1px, -1px);
+    }
+}
+
+@keyframes iconPulse {
+    0% {
+        transform: scale(1);
+    }
+    100% {
+        transform: scale(1.15);
+    }
+}
+
+@keyframes ringPulse {
+    0% {
+        transform: translate(-50%, -50%) scale(0.8);
+        opacity: 0.8;
+    }
+    50% {
+        opacity: 0.4;
+    }
+    100% {
+        transform: translate(-50%, -50%) scale(1.5);
+        opacity: 0;
+    }
+}
+
+@keyframes gridMove {
+    0% {
+        transform: perspective(500px) rotateX(60deg) translateY(0);
+    }
+    100% {
+        transform: perspective(500px) rotateX(60deg) translateY(30px);
+    }
+}
+
+@keyframes glowPulse {
+    0% {
+        opacity: 0.5;
+        transform: rotate(0deg);
+    }
+    100% {
+        opacity: 0.7;
+        transform: rotate(10deg);
+    }
+}
+
+@keyframes scannerMove {
+    0% {
+        left: -100%;
+    }
+    100% {
+        left: 200%;
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Responsive adjustments */
+@media (max-width: 992px) {
+    .header-content {
+        flex-direction: column;
+        text-align: center;
+        gap: 1rem;
+    }
+    
+    .text-container {
+        text-align: center;
+    }
+    
+    .glitch-text {
+        font-size: 2.5rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .security-stats {
+        gap: 1rem;
+    }
+    
+    .glitch-text {
+        font-size: 2rem;
+    }
+    
+    .header-tagline {
+        font-size: 1.1rem;
+    }
+}
+
+    /* Container */
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 2.5rem;
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px var(--shadow);
+      transform: translateY(0);
+      transition: var(--transition);
+      position: relative;
+      z-index: 1;
+    }
+
+    .container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+    }
+
+    h2 {
+      color: var(--primary);
+      margin-bottom: 1.5rem;
+      font-size: 1.8rem;
+      position: relative;
+      padding-bottom: 0.5rem;
+      display: inline-block;
+    }
+
+    h2::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(to right, var(--primary), var(--primary-light));
+      border-radius: 2px;
+    }
+
+    p {
+      line-height: 1.8;
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+      color: var(--text-secondary);
+    }
+
+    /* Input Area */
+    .input-area {
+      position: relative;
+      margin-bottom: 2rem;
+    }
+
+     textarea {
+  width: 100%;
+  height: 180px;
+  border: 2px solid #e1e5eb;
+  border-radius: 12px;
+  padding: 1.25rem;
+  font-size: 1rem;
+  font-family: inherit;
+  transition: var(--transition);
+  resize: none;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.03);
+  background: var(--card-bg);
+  color: var(--text-primary);
+}
+
+textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 4px rgba(67, 97, 238, 0.1);
+}
+
+/* Controls */
+.controls {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+  gap: 1rem;
+}
+
+.controls button {
+  flex: 1;
+}
+
+button {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  color: white;
+  padding: 1rem 1.75rem;
+  border: none;
+  border-radius: 10px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  transition: var(--transition);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+button i {
+  margin-right: 10px;
+  font-size: 1.1rem;
+}
+
+button:hover {
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(67, 97, 238, 0.4);
+}
+
+button:active {
+  transform: translateY(0);
+  box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+}
+
+button.clear {
+  background: transparent;
+  color: var(--text-secondary);
+  box-shadow: none;
+  border: 2px solid #e1e5eb;
+}
+
+button.clear:hover {
+  color: var(--text-primary);
+  border-color: var(--primary);
+  background: rgba(67, 97, 238, 0.05);
+}
+
+/* Loading */
+.loading {
+  display: none;
+  justify-content: center;
+  margin: 2rem 0;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid rgba(67, 97, 238, 0.1);
+  border-radius: 50%;
+  border-top-color: var(--primary);
+  animation: spin 1s ease-in-out infinite;
+}
+
+/* Result */
+.result {
+  margin-top: 1.5rem;
+  padding: 1.5rem;
+  border-radius: 15px;
+  transform: scale(0.97);
+  opacity: 0;
+  transition: var(--transition);
+  display: none;
+  box-shadow: 0 5px 15px var(--shadow);
+}
+
+.result.active {
+  transform: scale(1);
+  opacity: 1;
+  display: block;
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.result-header i {
+  font-size: 2rem;
+  margin-right: 15px;
+}
+
+.result-header span {
+  font-weight: 700;
+  font-size: 1.3rem;
+}
+
+.result p {
+  margin-bottom: 0;
+  font-size: 1.1rem;
+}
+
+.result.safe {
+  background: linear-gradient(135deg, #d8f3dc, #95d5b2);
+  border-left: 6px solid var(--success);
+  color: #1b4332;
+}
+
+.result.spam {
+  background: linear-gradient(135deg, #ffccd5, #ffb3c1);
+  border-left: 6px solid var(--danger);
+  color: #641220;
+}
+
+/* Features */
+.features {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.feature {
+  background: var(--bg-secondary);
+  border-radius: 15px;
+  padding: 2rem;
+  transition: var(--transition);
+  border: 1px solid rgba(0,0,0,0.05);
+  position: relative;
+  overflow: hidden;
+}
+
+.feature::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 5px;
+  background: linear-gradient(90deg, var(--primary), var(--secondary));
+}
+
+.feature:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  background: var(--card-bg);
+}
+
+.feature-icon {
+  background: linear-gradient(135deg, var(--primary), var(--secondary));
+  width: 60px;
+  height: 60px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 1.25rem;
+  color: white;
+  font-size: 1.75rem;
+  box-shadow: 0 5px 15px rgba(67, 97, 238, 0.2);
+}
+
+.feature h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--text-primary);
+}
+
+/* Footer */
+.footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  padding: 0.2rem 0.3rem;
+  font-size: 0.99rem;
+  background: linear-gradient(90deg, #5a769a, #455772);
+  margin-top: 3rem;
+  color: white !important;
+  position: relative;
+  height: 65px;
+}
+
+.footer, .footer * {
+  color: white !important;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 3px;
+  left: 0;
+  right: 0;
+  height: 0.1px;
+  background: linear-gradient(90deg, #e8851a, #11CB6A);
+}
+
+/* Animations */
+@keyframes fadeInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive Styles */
+@media (max-width: 768px) {
+  .page-header h1 {
+    font-size: 2rem;
+  }
+  
+  .container {
+    margin: 20px;
+    padding: 1.5rem;
+  }
+  
+  .controls {
+    flex-direction: column;
+  }
+  
+  .controls button {
+    width: 100%;
+    margin: 0.5rem 0;
+  }
+  
+  .features {
+    grid-template-columns: 1fr;
+  }
+  
+  .nav-links {
+    flex-wrap: wrap;
+    height: auto;
+    padding: 0.5rem;
+  }
+  
+  .nav-links li {
+    width: calc(50% - 0.5rem);
+  }
+  
+  .nav-links li a {
+    justify-content: center;
+    text-align: center;
+    padding: 0.5rem;
+  }
+}
+</style>
+
+</head>
+<body>
+    <!-- Main Header (Fixed) -->
+    <header class="main-header">
+        <div class="main-header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>NetShield Pro</h1>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+<div class="content-wrapper">
+        
+
+    <!-- Navigation Bar -->
+    <nav>
+        <ul class="nav-links">
+            <li><a href="home.html">Home</a></li>
+            <li><a href="index.html">URL Detection</a></li>
+            <li><a href="email.html" class="active">Email Security</a></li>
+            <li><a href="steg.html">Steganography</a></li>
+            <li><a href="socio.html">Social Engg</a></li>
+            <li><a href="pass.html">Password Vault</a></li>
+            <li><a href="ssl.html">SSL/TLS</a></li>
+        </ul>
+    </nav>
+
+  <div class="content-wrapper">
+        
+
+   <header class="page-header">
+    <div class="animated-background">
+        <div class="cyber-grid"></div>
+        <div class="floating-particles"></div>
+        <div class="glow-effect"></div>
+    </div>
+    
+    <div class="header-content">
+        <div class="icon-container">
+            <i class="fas fa-shield-alt"></i>
+            <div class="icon-rings">
+                <div class="ring ring1"></div>
+                <div class="ring ring2"></div>
+                <div class="ring ring3"></div>
+            </div>
+        </div>
+        
+        <div class="text-container">
+            <h1 class="glitch-text" data-text="EMAIL SECURITY SCANNER">EMAIL SECURITY SCANNER</h1>
+            <div class="scanner-bar"></div>
+            <p class="header-tagline">Advanced AI-powered protection against phishing and threats</p>
+            
+            <div class="security-stats">
+                <div class="stat">
+                    <span class="stat-value">99.8%</span>
+                    <span class="stat-label">Detection Rate</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">24/7</span>
+                    <span class="stat-label">Protection</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-value">0.1%</span>
+                    <span class="stat-label">False Positives</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+  
+    <div class="container">
+        <h2>Analyze Email Content</h2>
+        <p>Paste the suspicious email content below to check if it's legitimate or potentially harmful. Our advanced AI will analyze the text, links, and patterns to identify phishing attempts and other security threats.</p>
+        
+        <div class="input-area">
+            <textarea id="email-content" placeholder="Paste your email content here for analysis..."></textarea>
+        </div>
+        
+        <div class="controls">
+            <button id="analyze-btn" onclick="analyzeEmail()">
+                <i class="fas fa-search"></i> Analyze Email
+            </button>
+            <button class="clear" onclick="clearContent()">
+                <i class="fas fa-eraser"></i> Clear Content
+            </button>
+        </div>
+        
+        <div class="loading" id="loading">
+            <div class="spinner"></div>
+        </div>
+        
+        <div class="result" id="analysis-result">
+            <div class="result-header">
+                <i id="result-icon" class="fas"></i>
+                <span id="result-title">Analysis Result</span>
+            </div>
+            <p id="result-message"></p>
+        </div>
+        
+        <div class="features">
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <h3>AI-Powered Detection</h3>
+                <p>Advanced machine learning algorithms identify sophisticated phishing attempts, suspicious links, and malicious content patterns with high accuracy.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <h3>Real-Time Analysis</h3>
+                <p>Get instant results about potential threats in your email messages with detailed explanations of identified risks and recommended actions.</p>
+            </div>
+            
+            <div class="feature">
+                <div class="feature-icon">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <h3>Privacy Focused</h3>
+                <p>Your email content is analyzed securely with end-to-end encryption and never stored on our servers, ensuring complete confidentiality.</p>
+            </div>
+        </div>
+    </div>
+  
+    <footer class="footer">
+        <p>© 2025 NetShield Pro Email Security Scanner. All rights reserved.</p>
+    </footer>
+  
+    <script>
+
+          // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', newTheme);
+        });
+
+
+        document.addEventListener('DOMContentLoaded', function() {
+    // Create particles
+    const particlesContainer = document.querySelector('.floating-particles');
+    const colors = ['#ff3e3e', '#4cc9f0', '#ffffff'];
+    
+    for (let i = 0; i < 50; i++) {
+        const particle = document.createElement('div');
+        const size = Math.random() * 5 + 1;
+        const color = colors[Math.floor(Math.random() * colors.length)];
+        
+        particle.style.position = 'absolute';
+        particle.style.width = `${size}px`;
+        particle.style.height = `${size}px`;
+        particle.style.backgroundColor = color;
+        particle.style.borderRadius = '50%';
+        particle.style.top = `${Math.random() * 100}%`;
+        particle.style.left = `${Math.random() * 100}%`;
+        particle.style.opacity = Math.random() * 0.5 + 0.3;
+        particle.style.boxShadow = `0 0 ${size * 2}px ${color}`;
+        
+        // Animation properties
+        particle.style.animation = `floatParticle ${Math.random() * 15 + 10}s linear infinite`;
+        particle.style.animationDelay = `${Math.random() * 5}s`;
+        
+        // Create keyframes for this specific particle
+        const keyframes = `
+        @keyframes floatParticle {
+            0% {
+                transform: translate(0, 0);
+            }
+            25% {
+                transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+            }
+            50% {
+                transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+            }
+            75% {
+                transform: translate(${Math.random() * 100 - 50}px, ${Math.random() * 100 - 50}px);
+            }
+            100% {
+                transform: translate(0, 0);
+            }
+        }`;
+        
+        // Add keyframes to document
+        const styleElement = document.createElement('style');
+        styleElement.innerHTML = keyframes;
+        document.head.appendChild(styleElement);
+        
+        particlesContainer.appendChild(particle);
+    }
+    
+    // Animate stats counters
+    const statValues = document.querySelectorAll('.stat-value');
+    statValues.forEach(stat => {
+        const finalValue = stat.textContent;
+        let displayValue = '';
+        
+        if (finalValue.includes('%')) {
+            // For percentage stats
+            const numValue = parseFloat(finalValue);
+            let currentValue = 0;
+            const increment = numValue / 30;
+            
+            const timer = setInterval(() => {
+                currentValue += increment;
+                if (currentValue >= numValue) {
+                    currentValue = numValue;
+                    clearInterval(timer);
+                }
+                stat.textContent = `${currentValue.toFixed(1)}%`;
+            }, 50);
+        } else {
+            // For non-percentage stats
+            stat.textContent = finalValue;
+        }
+    });
+});
+     
+   
+        function analyzeEmail() {
+    const emailContent = document.getElementById('email-content').value;
+    const loadingDiv = document.getElementById('loading');
+    const resultDiv = document.getElementById('analysis-result');
+    const resultMessage = document.getElementById('result-message');
+    const resultIcon = document.getElementById('result-icon');
+
+    if (!emailContent.trim()) {
+        alert('Please provide email content for analysis.');
+        return;
+    }
+
+    // Quick local analysis for instant feedback
+    const localResult = quickAnalyzeContent(emailContent);
+
+    if (localResult.isSuspicious) {
+        loadingDiv.style.display = 'none';
+        resultDiv.className = 'result spam active';
+        resultIcon.className = 'fas fa-exclamation-triangle';
+        resultMessage.textContent = localResult.message;
+
+        // Ask the user if they still want a detailed backend analysis
+        const proceed = confirm("Suspicious content detected locally. Do you want to run a full server analysis?");
+        if (!proceed) return;
+    }
+
+    // Show loading spinner
+    resultDiv.classList.remove('active');
+    loadingDiv.style.display = 'flex';
+
+    // Backend analysis for deeper checks
+    fetch('/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ email_content: emailContent })
+    })
+    .then(response => response.json())
+    .then(data => {
+        loadingDiv.style.display = 'none';
+
+        const isSpam = data.result.includes('Spam');
+        resultDiv.className = isSpam ? 'result spam active' : 'result safe active';
+        resultIcon.className = isSpam ? 'fas fa-exclamation-triangle' : 'fas fa-check-circle';
+        resultMessage.textContent = data.result;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+        loadingDiv.style.display = 'none';
+        alert('An error occurred while analyzing the email.');
+    });
+}
+
+// Quick local phishing check
+function quickAnalyzeContent(content) {
+    const suspiciousTerms = [
+        'urgent', 'account locked', 'verify your', 'password expired', 'banking details',
+        'investment opportunity', 'lottery winner', 'click here', 'limited time', 'bitcoin',
+        'cryptocurrency', 'inheritance', 'claim your', 'authenticate', 'unusual activity'
+    ];
+
+    content = content.toLowerCase();
+    let foundTerms = suspiciousTerms.filter(term => content.includes(term));
+    const hasHttpLink = content.includes('http://');
+    const hasMismatchedLink = content.includes('href=') && 
+                               (content.includes('display:none') || content.includes('visibility:hidden'));
+
+    if (foundTerms.length > 2 || hasHttpLink || hasMismatchedLink) {
+        return {
+            isSuspicious: true,
+            message: `This email shows signs of a potential phishing attempt. ${
+                foundTerms.length > 0 ? 'Suspicious phrases detected: ' + foundTerms.slice(0, 3).join(', ') + '. ' : ''
+            }${hasHttpLink ? 'Insecure http:// links found. ' : ''}${
+                hasMismatchedLink ? 'Possible disguised link detected.' : ''
+            } Please be cautious and do not share personal information or click on any links.`
+        };
+    } else {
+        return {
+            isSuspicious: false,
+            message: "No obvious phishing indicators were detected locally. Running server-side analysis for deeper checks..."
+        };
+    }
+}
+    
+    function clearContent() {
+      document.getElementById('email-content').value = '';
+      document.getElementById('analysis-result').classList.remove('active');
+    }
+    </script>
+</body>
+</html>
+

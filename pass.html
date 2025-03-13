@@ -1,0 +1,1334 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NetShield Pro - Password Vault</title>
+    
+    <!-- Fonts and Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono&display=swap">
+
+   <style>
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #4361ee;
+      --accent-secondary: #3a0ca3;
+      --accent-tertiary: #7209b7;
+      --border-color: #dee2e6;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --header-text: #ffffff;
+      --nav-bg: #ffffff;
+      --nav-text: #212529;
+      --nav-active: #4361ee;
+      --nav-hover-bg: #f8f9fa;
+      --primary: #4361ee;
+      --secondary: #3a0ca3;
+      --primary-light: #6c8fff;
+      --shadow: rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.05);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.1);
+      --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.05);
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --transition: all 0.3s ease;
+      --light-color: #f8f9fa;
+      --dark-color: #1e1e1e;
+      --primary-gradient: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --primary-color: #4361ee;
+      --secondary-color: #3a0ca3;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --accent-primary: #4cc9f0;
+      --accent-secondary: #7209b7;
+      --accent-tertiary: #3a0ca3;
+      --border-color: #495057;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #3a0ca3, #7209b7);
+      --header-text: #ffffff;
+      --nav-bg: #1e1e1e;
+      --nav-text: #e9ecef;
+      --nav-active: #4cc9f0;
+      --nav-hover-bg: #2d2d2d;
+      --primary: #4cc9f0;
+      --secondary: #7209b7;
+      --primary-light: #7dd1f3;
+      --shadow: rgba(0, 0, 0, 0.2);
+      --shadow-md: 0 4px 6px rgba(0, 0, 0, 0.2);
+      --shadow-lg: 0 10px 30px rgba(0, 0, 0, 0.25);
+      --shadow-inner: inset 0 2px 4px rgba(0, 0, 0, 0.2);
+      --border-radius: 8px;
+      --border-radius-lg: 12px;
+      --transition: all 0.3s ease;
+      --light-color: #f8f9fa;
+      --dark-color: #1e1e1e;
+      --primary-gradient: linear-gradient(135deg, #4cc9f0, #7209b7);
+      --primary-color: #4cc9f0;
+      --secondary-color: #7209b7;
+    }
+
+    :root[data-theme="dark"] .card ul li {
+  color: #ffffff; /* White text for list items */
+}
+
+   :root[data-theme="light"] table, 
+:root[data-theme="light"] th {
+    color: white;
+}
+:root[data-theme="light"] table td {
+  color: #212529; /* Black text */
+}
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+      padding: 0;
+    }
+
+    .theme-toggle i {
+      font-size: 18px;
+      margin: 0;
+      line-height: 1;
+      transform: translateY(-0.5px);
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(15deg);
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      margin-top: 70px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 70px;
+      z-index: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .nav-links li a.active {
+      color: var(--nav-active);
+      border-bottom: 3px solid var(--nav-active);
+    }
+
+    /* Content Wrapper */
+    .content-wrapper {
+      padding-top: 1px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    /* Hero Section */
+     .hero-section {
+    /* background: linear-gradient(125deg, #7928ca, #ff0080); */
+    background-color: #050e2d;
+    position: relative;
+    padding: 50px 0 40px;
+    text-align: center;
+    color: white;
+    overflow: hidden;
+  }
+  
+  .hero-section::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M11 18c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm48 25c3.866 0 7-3.134 7-7s-3.134-7-7-7-7 3.134-7 7 3.134 7 7 7zm-43-7c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm63 31c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM34 90c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zm56-76c1.657 0 3-1.343 3-3s-1.343-3-3-3-3 1.343-3 3 1.343 3 3 3zM12 86c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm28-65c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm23-11c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-6 60c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm29 22c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zM32 63c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm57-13c2.76 0 5-2.24 5-5s-2.24-5-5-5-5 2.24-5 5 2.24 5 5 5zm-9-21c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM60 91c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM35 41c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2zM12 60c1.105 0 2-.895 2-2s-.895-2-2-2-2 .895-2 2 .895 2 2 2z' fill='%23ffffff' fill-opacity='0.1' fill-rule='evenodd'/%3E%3C/svg%3E");
+    opacity: 0.6;
+  }
+
+  .particles-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+  }
+
+  .hero-content {
+    position: relative;
+    z-index: 1;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 20px;
+  }
+
+   hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+  }
+  
+  .hero-title {
+    font-size: 3.5rem;
+    font-weight: 800;
+    margin-bottom: 20px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    font-weight: 400;
+    margin-bottom: 40px;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+.password-visualizer { 
+    background: rgba(0, 255, 127, 0.1); /* Light green tint */
+    backdrop-filter: blur(8px);
+    padding: 30px;
+    border-radius: 16px;
+    border: 2px solid rgba(0, 255, 127, 0.5);
+    box-shadow: 0 0 20px rgba(0, 255, 127, 0.3);
+    max-width: 600px;
+    margin: 0 auto 40px;
+}
+
+  .password-display {
+    display: flex;
+    justify-content: center;
+    gap: 4px;
+    margin-bottom: 20px;
+    perspective: 500px;
+  }
+  
+  .pw-char {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Roboto Mono', monospace;
+    font-size: 1.75rem;
+    width: 35px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 6px;
+    padding: 5px;
+    animation: charAnimation 6s infinite;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transform-style: preserve-3d;
+  }
+  
+  @keyframes charAnimation {
+    0%, 100% { transform: rotateY(0deg); background: rgba(255, 255, 255, 0.1); }
+    8% { transform: rotateY(180deg); background: rgba(67, 97, 238, 0.3); }
+    16% { transform: rotateY(0deg); background: rgba(255, 255, 255, 0.1); }
+  }
+  
+  .pw-char:nth-child(1) { animation-delay: 0s; }
+  .pw-char:nth-child(2) { animation-delay: 0.5s; }
+  .pw-char:nth-child(3) { animation-delay: 1s; }
+  .pw-char:nth-child(4) { animation-delay: 1.5s; }
+  .pw-char:nth-child(5) { animation-delay: 2s; }
+  .pw-char:nth-child(6) { animation-delay: 2.5s; }
+  .pw-char:nth-child(7) { animation-delay: 3s; }
+  .pw-char:nth-child(8) { animation-delay: 3.5s; }
+  .pw-char:nth-child(9) { animation-delay: 4s; }
+  .pw-char:nth-child(10) { animation-delay: 4.5s; }
+  .pw-char:nth-child(11) { animation-delay: 5s; }
+  .pw-char:nth-child(12) { animation-delay: 5.5s; }
+  
+  .strength-meter {
+    text-align: center;
+  }
+  
+  .meter {
+    height: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 10px;
+  }
+  
+  .meter-bar {
+    height: 100%;
+    width: 90%;
+    background: linear-gradient(to right, #38b000, #80b918);
+    border-radius: 5px;
+    transition: width 0.3s ease;
+    animation: strengthPulse 4s infinite;
+  }
+  
+  @keyframes strengthPulse {
+    0%, 100% { width: 90%; background: linear-gradient(to right, #38b000, #80b918); }
+    50% { width: 60%; background: linear-gradient(to right, #ffb703, #fb8500); }
+  }
+  
+  .strength-text {
+    font-size: 1.1rem;
+    font-weight: 600;
+    animation: textChange 4s infinite;
+  }
+  
+  @keyframes textChange {
+    0%, 100% { content: "Strong Password"; color: #38b000; }
+    50% { content: "Medium Password"; color: #ffb703; }
+  }
+  
+  .hero-action {
+    margin-top: 30px;
+  }
+  
+  .action-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: white;
+    color: #7928ca;
+    font-weight: 600;
+    padding: 14px 30px;
+    border-radius: 30px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .action-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 25px rgba(0, 0, 0, 0.25);
+  }
+  
+  .action-btn i {
+    transition: transform 0.3s ease;
+  }
+  
+  .action-btn:hover i {
+    transform: translateX(5px);
+  }
+  
+     @media (max-width: 768px) {
+    .hero-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .hero-title {
+      font-size: 2.5rem;
+    }
+
+    
+    .password-display {
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    
+    .pw-char {
+      font-size: 1.5rem;
+      width: 30px;
+      height: 40px;
+    }
+  }  
+
+ 
+
+    /* Container */
+    .container {
+      max-width: 1200px;
+      margin: 60px auto;
+      padding: 0 20px;
+    }
+
+    /* Section Styling */
+    .section {
+      margin-bottom: 80px;
+    }
+
+    .section-title {
+      text-align: center;
+      font-size: 2.25rem;
+      font-weight: 700;
+      margin-bottom: 40px;
+      color: var(--primary-color);
+      position: relative;
+      padding-bottom: 15px;
+    }
+
+    .section-title::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 60px;
+      height: 4px;
+      background: var(--primary-gradient);
+      border-radius: 2px;
+    }
+
+    /* Card Styles */
+    .card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      margin: 20px 0;
+      border: none;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .card-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+    }
+
+    .card p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 20px;
+      color: var(--text-primary);
+    }
+
+    .card ul {
+      padding-left: 20px;
+    }
+
+    .card ul li {
+      margin-bottom: 12px;
+      font-size: 1.1rem;
+      position: relative;
+      list-style-type: none;
+      padding-left: 25px;
+    }
+
+    .card ul li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: var(--primary-color);
+      font-weight: bold;
+    }
+
+    /* Comparison Table */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 20px 0;
+      box-shadow: var(--shadow-md);
+      border-radius: var(--border-radius);
+      overflow: hidden;
+    }
+
+    .comparison-table th, .comparison-table td {
+      padding: 15px;
+      text-align: center;
+      border: 1px solid var(--border-color);
+    }
+
+    .comparison-table th {
+      background-color: var(--primary-color);
+      color: white;
+      font-weight: 600;
+      text-transform: uppercase;
+      font-size: 0.9rem;
+    }
+
+    .comparison-table tr:nth-child(even) {
+      background-color: var(--bg-secondary);
+    }
+
+    .comparison-table td:first-child {
+      font-weight: 600;
+      text-align: left;
+    }
+
+     /* For table text */
+    .comparison-table th,
+    .comparison-table td {
+        color: #ffffff; /* White text */
+    }
+
+    /* CTA Buttons */
+    .cta-buttons {
+      text-align: center;
+      margin: 40px 0;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--primary-gradient);
+      color: white;
+      padding: 15px 30px;
+      border-radius: var(--border-radius);
+      text-decoration: none;
+      font-weight: 600;
+      margin: 10px;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 4px 15px rgba(67, 97, 238, 0.3);
+    }
+
+    .cta-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(67, 97, 238, 0.4);
+      color: white;
+    }
+
+    /* Password Examples */
+    .password-examples-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .password-example-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      padding: 25px;
+      width: 300px;
+      text-align: center;
+      position: relative;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      overflow: hidden;
+    }
+
+    .password-example-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+    }
+
+    .password-example-card.weak::before {
+      background-color: #e63946;
+    }
+
+    .password-example-card.medium::before {
+      background-color: #ffb703;
+    }
+
+    .password-example-card.strong::before {
+      background-color: #38b000;
+    }
+
+    .password-example-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .password-example-card h4 {
+      font-size: 1.25rem;
+      margin-bottom: 15px;
+      font-weight: 700;
+    }
+
+    .password-example-card .password {
+      font-family: 'Roboto Mono', monospace;
+      font-size: 1.1rem;
+      padding: 10px;
+      background-color: var(--bg-secondary);
+      border-radius: var(--border-radius);
+      margin: 15px 0;
+    }
+
+    .password-example-card .weak-text {
+      color: #e63946;
+    }
+
+    .password-example-card .medium-text {
+      color: #ffb703;
+    }
+
+    .password-example-card .strong-text {
+      color: #38b000;
+    }
+
+    .password-example-card p {
+      font-size: 1rem;
+      margin: 10px 0;
+    }
+
+    /* Password Checker */
+    .password-checker-container {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius-lg);
+      box-shadow: var(--shadow-lg);
+      padding: 30px;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .password-checker-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 20px;
+      color: var(--primary-color);
+      text-align: center;
+    }
+
+    .password-wrapper {
+      position: relative;
+      margin: 25px 0;
+    }
+
+    .password-input {
+      width: 100%;
+      padding: 15px;
+      font-size: 1.1rem;
+      border: 2px solid var(--border-color);
+      border-radius: var(--border-radius);
+      transition: border-color 0.3s;
+    }
+
+    .password-input:focus {
+      outline: none;
+      border-color: var(--primary-color);
+    }
+
+    .eye-icon {
+      position: absolute;
+      right: 15px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1.25rem;
+      color: var(--text-secondary);
+      cursor: pointer;
+      transition: color 0.3s;
+    }
+
+    .eye-icon:hover {
+      color: var(--primary-color);
+    }
+
+    .progress-container {
+      margin: 20px 0;
+    }
+
+    .progress-bar {
+      height: 10px;
+      width: 100%;
+      background-color: var(--bg-secondary);
+      border-radius: 5px;
+      overflow: hidden;
+    }
+
+    .progress-fill {
+      height: 100%;
+      width: 0%;
+      border-radius: 5px;
+      transition: width 0.3s ease, background-color 0.3s;
+    }
+
+    .password-strength-text {
+      margin-top: 10px;
+      font-weight: 600;
+      text-align: center;
+    }
+
+    .weak-text {
+      color: #e63946;
+    }
+
+    .medium-text {
+      color: #ffb703;
+    }
+
+    .strong-text {
+      color: #38b000;
+    }
+
+    /* Tips Section */
+    .tips-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 30px;
+      margin: 40px 0;
+    }
+
+    .tip-card {
+      background-color: var(--card-bg);
+      border-radius: var(--border-radius);
+      box-shadow: var(--shadow-md);
+      padding: 25px;
+      transition: transform 0.3s ease;
+    }
+
+    .tip-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .tip-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+      margin-bottom: 15px;
+    }
+
+    .tip-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 15px;
+    }
+
+    .tip-content {
+      font-size: 1rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    footer {
+      background-color: var(--bg-secondary);
+      padding: 30px 0;
+      text-align: center;
+      margin-top: auto;
+    }
+
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .footer-text {
+      font-size: 1rem;
+      color: var(--text-secondary);
+      margin-bottom: 10px;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .hero-title {
+        font-size: 2.25rem;
+      }
+      
+      .hero-subtitle {
+        font-size: 1.1rem;
+      }
+      
+      .section-title {
+        font-size: 1.75rem;
+      }
+      
+      .password-examples-container {
+        flex-direction: column;
+        align-items: center;
+      }
+      
+      .comparison-table {
+        font-size: 0.9rem;
+      }
+      
+      .cta-btn {
+        display: block;
+        margin: 10px auto;
+        max-width: 250px;
+      }
+      
+      .tips-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Keeping original header -->
+  <header>
+    <div class="header-content">
+      <div class="logo">
+        <i class="fas fa-shield-alt"></i>
+        <h1>NetShield Pro</h1>
+      </div>
+      <button class="theme-toggle" id="themeToggle">
+        <i class="fas fa-moon"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Keeping original navigation -->
+  <nav>
+    <ul class="nav-links">
+      <li><a href="home.html">Home</a></li>
+      <li><a href="index.html">URL Detection</a></li>
+      <li><a href="email.html">Email Security</a></li>
+      <li><a href="steg.html">Steganography</a></li>
+      <li><a href="socio.html">Social Engg</a></li>
+      <li><a href="pass.html" class="active">Password Vault</a></li>
+      <li><a href="ssl.html">SSL/TLS</a></li>
+    </ul>
+  </nav>
+
+  <div class="content-wrapper">
+ 
+<!-- Interactive Hero Section with Password Strength Demo -->
+<section class="hero-section">
+<div class="particles-bg" id="particles-js"></div>
+  <div class="hero-content">
+  <div class="hero-grid"></div>
+  <div class="hero-text"></div>
+    <h1 class="hero-title">Secure Password Vault</h1>
+    <p class="hero-subtitle">Protect your digital identity with state-of-the-art password management</p>
+    
+    <div class="password-visualizer">
+      <div class="password-display">
+        <span id="pw-char-1" class="pw-char">P</span>
+        <span id="pw-char-2" class="pw-char">a</span>
+        <span id="pw-char-3" class="pw-char">s</span>
+        <span id="pw-char-4" class="pw-char">s</span>
+        <span id="pw-char-5" class="pw-char">w</span>
+        <span id="pw-char-6" class="pw-char">o</span>
+        <span id="pw-char-7" class="pw-char">r</span>
+        <span id="pw-char-8" class="pw-char">d</span>
+        <span id="pw-char-9" class="pw-char">1</span>
+        <span id="pw-char-10" class="pw-char">2</span>
+        <span id="pw-char-11" class="pw-char">3</span>
+        <span id="pw-char-12" class="pw-char">!</span>
+      </div>
+      <div class="strength-meter">
+        <div class="meter">
+          <div class="meter-bar" id="strengthMeter"></div>
+        </div>
+        <div class="strength-text" id="strengthText">Strong Password</div>
+      </div>
+    </div>
+    
+    <div class="hero-action">
+  <a href="#password-checker" class="action-btn">
+    Check Your Password Strength Now
+    <i class="fas fa-arrow-right"></i>
+  </a>
+</div>
+  </div>
+</section>
+
+
+    <div class="container">
+      <!-- Why Password Security Section -->
+      <section class="section">
+        <h2 class="section-title">Why Password Security Matters</h2>
+        <div class="card">
+          <h3 class="card-title">Protecting Your Digital Fortress</h3>
+          <p>In today's digital world, your passwords are the keys to your personal information, financial accounts, and online identity. Using secure password practices is essential for several reasons:</p>
+          <ul>
+            <li>Most data breaches occur due to weak or reused passwords</li>
+            <li>Cybercriminals use sophisticated tools to crack simple passwords in seconds</li>
+            <li>A single compromised account can lead to multiple security issues</li>
+            <li>Password managers create a secure, encrypted vault for all your credentials</li>
+            <li>Unique, complex passwords significantly reduce your risk of being hacked</li>
+          </ul>
+        </div>
+      </section>
+
+      <!-- Password Manager Comparison -->
+      <section class="section">
+        <h2 class="section-title">Top Password Managers Compared</h2>
+        <div class="card">
+          <p>Password managers securely store all your passwords in an encrypted vault, allowing you to use strong, unique passwords for every account without needing to memorize them. Here's how the leading solutions compare:</p>
+          
+          <table class="comparison-table">
+            <thead>
+              <tr>
+                <th>Password Manager</th>
+                <th>Free Version</th>
+                <th>Premium Price</th>
+                <th>Cross-Platform</th>
+                <th>Two-Factor Auth</th>
+                <th>Secure Sharing</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>LastPass</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td>$3/month</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Dashlane</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td>$4.99/month</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+              </tr>
+              <tr>
+                <td>Bitwarden</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td>$10/year</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+              </tr>
+              <tr>
+                <td>1Password</td>
+                <td><i class="fas fa-times text-danger"></i></td>
+                <td>$2.99/month</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+              </tr>
+              <tr>
+                <td>NordPass</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td>$1.99/month</td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+                <td><i class="fas fa-check text-success"></i></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="cta-buttons">
+          <a href="https://www.lastpass.com" target="_blank" class="cta-btn">
+            <i class="fas fa-shield-alt"></i> Try LastPass
+          </a>
+          <a href="https://www.dashlane.com" target="_blank" class="cta-btn">
+            <i class="fas fa-key"></i> Try Dashlane
+          </a>
+          <a href="https://bitwarden.com" target="_blank" class="cta-btn">
+            <i class="fas fa-lock"></i> Try Bitwarden
+          </a>
+        </div>
+      </section>
+
+      <!-- Password Examples -->
+      <section class="section">
+        <h2 class="section-title">Password Security Examples</h2>
+        
+        <div class="password-examples-container">
+          <div class="password-example-card weak">
+            <h4>Weak Password</h4>
+            <div class="password weak-text">123456</div>
+            <p>This password can be cracked instantly</p>
+            <p><i class="fas fa-exclamation-triangle weak-text"></i> Too short and only uses numbers</p>
+            <p><i class="fas fa-exclamation-triangle weak-text"></i> Appears in data breach lists</p>
+          </div>
+          
+          <div class="password-example-card medium">
+            <h4>Medium Password</h4>
+            <div class="password medium-text">dolphin2023</div>
+            <p>This password would take days to crack</p>
+            <p><i class="fas fa-check-circle medium-text"></i> Uses letters and numbers</p>
+            <p><i class="fas fa-exclamation-triangle medium-text"></i> Missing special characters</p>
+          </div>
+          
+          <div class="password-example-card strong">
+            <h4>Strong Password</h4>
+            <div class="password strong-text">j8K&@p3L!hQ9xZ</div>
+            <p>This password would take centuries to crack</p>
+            <p><i class="fas fa-check-circle strong-text"></i> Mix of characters</p>
+            <p><i class="fas fa-check-circle strong-text"></i> Good length and complexity</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Password Strength Checker -->
+      <section id="password-checker" class="section">
+        <h2 class="section-title">Password Strength Analyzer</h2>
+        
+        <div class="password-checker-container">
+          <h3 class="password-checker-title">Test Your Password Security</h3>
+          <p>Enter your password below to check its strength. Don't worry, we don't store your input.</p>
+          
+          <div class="password-wrapper">
+            <input type="password" id="passwordField" class="password-input" placeholder="Enter a password to check" onkeyup="checkPasswordStrength(this.value)">
+            <span class="eye-icon" id="togglePassword" onclick="togglePasswordVisibility()">
+              <i class="fas fa-eye"></i>
+            </span>
+          </div>
+          
+          <div class="progress-container">
+            <div class="progress-bar">
+              <div class="progress-fill" id="progressBar"></div>
+            </div>
+            <p class="password-strength-text" id="passwordStrength">Password strength will appear here</p>
+          </div>
+          
+          <div id="passwordFeedback"></div>
+        </div>
+      </section>
+<br>
+      <!-- Password Tips -->
+      <section class="section">
+        <h2 class="section-title">Password Security Best Practices</h2>
+        
+        <div class="tips-grid">
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-ruler"></i>
+            </div>
+            <h3 class="tip-title">Length Matters</h3>
+            <p class="tip-content">Use passwords that are at least 12 characters long. Longer passwords are exponentially harder to crack than shorter ones.</p>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-random"></i>
+            </div>
+            <h3 class="tip-title">Mix Characters</h3>
+            <p class="tip-content">Combine uppercase letters, lowercase letters, numbers, and special characters to increase complexity.</p>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-fingerprint"></i>
+            </div>
+            <h3 class="tip-title">Unique Passwords</h3>
+            <p class="tip-content">Use a different password for each account. This prevents one breach from compromising all your accounts.</p>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-history"></i>
+            </div>
+            <h3 class="tip-title">Regular Updates</h3>
+            <p class="tip-content">Change your passwords every 3-6 months, and immediately after any service you use reports a data breach.</p>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-shield-alt"></i>
+            </div>
+            <h3 class="tip-title">Use 2FA</h3>
+            <p class="tip-content">Enable two-factor authentication whenever possible for an extra layer of security beyond just your password.</p>
+          </div>
+          
+          <div class="tip-card">
+            <div class="tip-icon">
+              <i class="fas fa-brain"></i>
+            </div>
+            <h3 class="tip-title">Passphrase Method</h3>
+            <p class="tip-content">Consider using passphrases - several random words combined with numbers and symbols - they're easier to remember and hard to crack.</p>
+          </div>
+        </div>
+      </section>
+    </div>
+
+    <!-- Footer -->
+    <footer>
+      <div class="footer-content">
+        <p class="footer-text">© 2023 NetShield Pro. All rights reserved.</p>
+        <p class="footer-text">Protect your digital identity with our comprehensive security solutions.</p>
+      </div>
+    </footer>
+  </div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/particles.js/2.0.0/particles.min.js"></script>
+
+  <!-- Scripts -->
+  <script>
+    // Theme Toggler
+    const themeToggle = document.getElementById('themeToggle');
+    const root = document.documentElement;
+    const icon = themeToggle.querySelector('i');
+    
+    // Check for saved theme preference or use default
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    root.setAttribute('data-theme', savedTheme);
+    
+    // Update icon based on current theme
+    if (savedTheme === 'dark') {
+      icon.classList.remove('fa-moon');
+      icon.classList.add('fa-sun');
+    }
+    
+    themeToggle.addEventListener('click', () => {
+      const currentTheme = root.getAttribute('data-theme');
+      const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+      
+      root.setAttribute('data-theme', newTheme);
+      localStorage.setItem('theme', newTheme);
+      
+      // Toggle icon
+      if (newTheme === 'dark') {
+        icon.classList.remove('fa-moon');
+        icon.classList.add('fa-sun');
+      } else {
+        icon.classList.remove('fa-sun');
+        icon.classList.add('fa-moon');
+      }
+    });
+
+     // Initialize particles.js
+  document.addEventListener('DOMContentLoaded', function() {
+    if(typeof particlesJS !== 'undefined') {
+      particlesJS("particles-js", {
+        particles: {
+          number: { value: 80, density: { enable: true, value_area: 800 } },
+          color: { value: "#ffffff" },
+          shape: { type: "circle" },
+          opacity: { value: 0.5, random: true },
+          size: { value: 3, random: true },
+          line_linked: {
+            enable: true,
+            distance: 150,
+            color: "#ffffff",
+            opacity: 0.4,
+            width: 1
+          },
+          move: {
+            enable: true,
+            speed: 2,
+            direction: "none",
+            random: true,
+            out_mode: "out"
+          }
+        },
+        interactivity: {
+          detect_on: "canvas",
+          events: {
+            onhover: { enable: true, mode: "repulse" },
+            onclick: { enable: true, mode: "push" }
+          },
+          modes: {
+            repulse: { distance: 100, duration: 0.4 },
+            push: { particles_nb: 4 }
+          }
+        }
+      });
+    }
+  });
+
+
+
+     // Animate strength text
+  document.addEventListener('DOMContentLoaded', function() {
+    const strengthText = document.getElementById('strengthText');
+    const strengthMeter = document.getElementById('strengthMeter');
+    
+    setInterval(() => {
+      if (strengthText.textContent === "Strong Password") {
+        strengthText.textContent = "Medium Password";
+        strengthText.style.color = "#ffb703";
+        strengthMeter.style.width = "60%";
+        strengthMeter.style.background = "linear-gradient(to right, #ffb703, #fb8500)";
+      } else {
+        strengthText.textContent = "Strong Password";
+        strengthText.style.color = "#38b000";
+        strengthMeter.style.width = "90%";
+        strengthMeter.style.background = "linear-gradient(to right, #38b000, #80b918)";
+      }
+    }, 4000);
+  });
+
+
+    // Password Visibility Toggle
+    function togglePasswordVisibility() {
+      const passwordField = document.getElementById('passwordField');
+      const eyeIcon = document.getElementById('togglePassword').querySelector('i');
+      
+      if (passwordField.type === 'password') {
+        passwordField.type = 'text';
+        eyeIcon.classList.remove('fa-eye');
+        eyeIcon.classList.add('fa-eye-slash');
+      } else {
+        passwordField.type = 'password';
+        eyeIcon.classList.remove('fa-eye-slash');
+        eyeIcon.classList.add('fa-eye');
+      }
+    }
+    
+    // Password Strength Checker
+    function checkPasswordStrength(password) {
+      const progressBar = document.getElementById('progressBar');
+      const strengthText = document.getElementById('passwordStrength');
+      const feedbackElement = document.getElementById('passwordFeedback');
+      
+      if (!password) {
+        progressBar.style.width = '0%';
+        progressBar.style.backgroundColor = '#e9ecef';
+        strengthText.textContent = 'Password strength will appear here';
+        strengthText.className = 'password-strength-text';
+        feedbackElement.innerHTML = '';
+        return;
+      }
+      
+      // Check password strength
+      let strength = 0;
+      let feedback = [];
+      
+      // Length check
+      if (password.length < 8) {
+        feedback.push('<p><i class="fas fa-times-circle weak-text"></i> Password is too short (minimum 8 characters)</p>');
+      } else {
+        strength += 20;
+        if (password.length >= 12) {
+          strength += 10;
+        }
+      }
+      
+      // Check for different character types
+      if (/[A-Z]/.test(password)) {
+        strength += 20;
+      } else {
+        feedback.push('<p><i class="fas fa-times-circle weak-text"></i> Add uppercase letters</p>');
+      }
+      
+      if (/[a-z]/.test(password)) {
+        strength += 20;
+      } else {
+        feedback.push('<p><i class="fas fa-times-circle weak-text"></i> Add lowercase letters</p>');
+      }
+      
+      if (/[0-9]/.test(password)) {
+        strength += 20;
+      } else {
+        feedback.push('<p><i class="fas fa-times-circle weak-text"></i> Add numbers</p>');
+      }
+      
+      if (/[^A-Za-z0-9]/.test(password)) {
+        strength += 20;
+      } else {
+        feedback.push('<p><i class="fas fa-times-circle weak-text"></i> Add special characters</p>');
+      }
+      
+      // Common passwords check (simplified)
+      const commonPasswords = ['password', '123456', 'qwerty', 'admin', 'welcome', 'letmein'];
+      if (commonPasswords.includes(password.toLowerCase())) {
+        strength = 10;
+        feedback.push('<p><i class="fas fa-exclamation-triangle weak-text"></i> This is a commonly used password</p>');
+      }
+      
+      // Set progress bar and text
+      progressBar.style.width = `${strength}%`;
+      
+      if (strength < 40) {
+        progressBar.style.backgroundColor = '#e63946'; // Weak
+        strengthText.textContent = 'Weak Password';
+        strengthText.className = 'password-strength-text weak-text';
+      } else if (strength < 70) {
+        progressBar.style.backgroundColor = '#ffb703'; // Medium
+        strengthText.textContent = 'Medium Password';
+        strengthText.className = 'password-strength-text medium-text';
+      } else {
+        progressBar.style.backgroundColor = '#38b000'; // Strong
+        strengthText.textContent = 'Strong Password';
+        strengthText.className = 'password-strength-text strong-text';
+      }
+      
+      // Display feedback
+      feedbackElement.innerHTML = feedback.join('');
+      if (feedback.length === 0 && strength >= 70) {
+        feedbackElement.innerHTML = '<p><i class="fas fa-check-circle strong-text"></i> Great password! It\'s strong and secure.</p>';
+      }
+    }
+  </script>
+</body>
+</html>
+
+
+
+
+
+

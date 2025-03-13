@@ -1,0 +1,1076 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Steganography Tool - NetShield Pro</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.0/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono&display=swap">
+  <style>
+    :root[data-theme="light"] {
+      --bg-primary: #f8f9fa;
+      --bg-secondary: #e9ecef;
+      --bg-tertiary: #ffffff;
+      --text-primary: #212529;
+      --text-secondary: #6c757d;
+      --accent-primary: #4361ee;
+      --accent-secondary: #3a0ca3;
+      --accent-tertiary: #7209b7;
+      --border-color: #dee2e6;
+      --card-bg: #ffffff;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #4361ee, #3a0ca3);
+      --header-text: #ffffff;
+      --nav-bg: #ffffff;
+      --nav-text: #212529;
+      --nav-active: #4361ee;
+      --nav-hover-bg: #f8f9fa;
+    }
+
+    :root[data-theme="dark"] {
+      --bg-primary: #121212;
+      --bg-secondary: #1e1e1e;
+      --bg-tertiary: #2d2d2d;
+      --text-primary: #e9ecef;
+      --text-secondary: #adb5bd;
+      --accent-primary: #4cc9f0;
+      --accent-secondary: #7209b7;
+      --accent-tertiary: #3a0ca3;
+      --border-color: #495057;
+      --card-bg: #2d2d2d;
+      --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+      --danger: #e63946;
+      --success: #38b000;
+      --warning: #ffb703;
+      --info: #4cc9f0;
+      --header-bg: linear-gradient(135deg, #3a0ca3, #7209b7);
+      --header-text: #ffffff;
+      --nav-bg: #1e1e1e;
+      --nav-text: #e9ecef;
+      --nav-active: #4cc9f0;
+      --nav-hover-bg: #2d2d2d;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', sans-serif;
+      transition: background-color 0.3s, color 0.3s;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-primary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    header {
+      background: var(--header-bg);
+      color: var(--header-text);
+      padding: 1rem 0;
+      position: fixed;
+      width: 100%;
+      z-index: 1000;
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .header-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 0 1.5rem;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+
+    .logo i {
+      font-size: 1.75rem;
+    }
+
+    .logo h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+    }
+
+    .theme-toggle {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      color: white;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: transform 0.3s, background-color 0.3s;
+    }
+
+    .theme-toggle:hover {
+      background: rgba(255, 255, 255, 0.3);
+      transform: rotate(15deg);
+    }
+
+    nav {
+      background-color: var(--nav-bg);
+      padding: 0.5rem 0;
+      margin-top: 70px;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+      position: sticky;
+      top: 70px;
+      z-index: 900;
+    }
+
+    .nav-links {
+      display: flex;
+      justify-content: center;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      gap: 0.5rem;
+    }
+
+    .nav-links li a {
+      display: block;
+      padding: 0.75rem 1.25rem;
+      color: var(--nav-text);
+      text-decoration: none;
+      font-weight: 500;
+      border-radius: 6px;
+      transition: all 0.3s ease;
+    }
+
+    .nav-links li a:hover {
+      background-color: var(--nav-hover-bg);
+      transform: translateY(-2px);
+    }
+
+    .nav-links li a.active {
+      color: var(--nav-active);
+      border-bottom: 3px solid var(--nav-active);
+    }
+
+/* Hero Section */
+.hero {
+    position: relative;
+    height: 75vh;
+    width: 100%;
+    background-image: url('../static/images/bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-color: #000;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 10%;
+    overflow: hidden;
+}
+
+.hero::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    z-index: 1;
+}
+
+.overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle, rgba(0, 123, 255, 0.1) 10%, transparent 10.01%);
+            background-size: 20px 20px;
+            animation: moveOverlay 5s linear infinite;
+        }
+
+        @keyframes moveOverlay {
+            0% { background-position: 0 0; }
+            100% { background-position: 20px 20px; }
+        }
+
+
+.hero-content {
+    position: relative;
+    z-index: 3;
+    max-width: 1200px;
+    color: white;
+    text-align: center;
+}
+
+.hero-content h1 {
+    font-size: 3.0rem;
+    font-weight: bold;
+    line-height: 1.2;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+}
+
+.hero-content p {
+    font-size: 1.25rem;
+    line-height: 1.6;
+    max-width: 800px;
+}
+
+@media (max-width: 768px) {
+    .hero-content h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero-content p {
+        font-size: 1rem;
+    }
+}
+
+.gradient-border {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    padding: 10px; 
+    box-sizing: border-box;
+    pointer-events: none; /* Ensure clicks pass through */
+    z-index: 2; /* Above the overlay but below content */
+
+    border: 5px solid;
+    border-image: linear-gradient(45deg, #00e5ff, #ff00ff) 1;
+    border-radius: 5px;
+}
+
+
+/* Main Features Grid */
+.features-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+    padding: 40px;
+    max-width: 1200px;
+    margin: 0 auto;
+    perspective: 1000px;
+}
+
+.feature-card {
+    background: var(--card-bg);
+    border-radius: 15px;
+    padding: 25px;
+    box-shadow: 0 5px 15px var(--shadow);
+    transition: transform 0.3s, box-shadow 0.3s;
+    position: relative;
+    overflow: hidden;
+    transform-style: preserve-3d;
+}
+
+.feature-card:hover {
+    transform: translateY(-5px) rotateX(10deg) rotateY(10deg);
+    box-shadow: 0 20px 40px var(--shadow);
+}
+
+.feature-card i {
+    font-size: 2rem;
+    margin-bottom: 15px;
+    background: linear-gradient(45deg, var(--accent-primary), var(--accent-secondary));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* URL Scanner Section */
+.scanner-section {
+    max-width: 800px;
+    margin: 40px auto;
+    padding: 20px;
+}
+
+.url-form {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 15px;
+    box-shadow: none;
+}
+
+.url-form:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+.url-input {
+    width: 100%;
+    padding: 15px;
+    border: 2px solid var(--text-secondary);
+    border-radius: 10px;
+    background: var(--bg-primary);
+    color: var(--text-primary);
+    margin-bottom: 20px;
+}
+
+.url-input:focus {
+    outline: none;
+    border-color: var(--accent-primary);
+}
+
+.scanner-section .scan-btn {
+    width: 20%;
+    padding: 10px;
+    background: var(--accent-primary);
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+}
+
+.scanner-section .scan-btn:hover {
+    background: var(--accent-secondary);
+}
+
+/* History Section */
+.history-section {
+    background: var(--bg-secondary);
+    padding: 40px 20px;
+    perspective: 1000px;
+}
+
+.history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    transform-style: preserve-3d;
+}
+
+.history-table th,
+.history-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid var(--text-secondary);
+}
+
+.history-table button {
+    padding: 5px 10px;
+    margin: 0 5px;
+    border: none;
+    background-color: var(--accent-primary);
+    color: white;
+    cursor: pointer;
+    border-radius: 3px;
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+.history-table button:hover {
+    background-color: var(--accent-secondary);
+    transform: scale(1.1);
+}
+
+/* Statistics Dashboard */
+.stats-dashboard {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    padding: 20px;
+    perspective: 1000px;
+}
+
+.stat-card {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+    width: 250px;
+    height: 150px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    font-weight: 600;
+    transform-style: preserve-3d;
+    transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.stat-card:hover {
+    transform: rotateX(5deg) rotateY(5deg);
+    box-shadow: 0 20px 40px var(--shadow);
+}
+
+/* Animation Classes */
+.fade-in {
+    animation: fadeIn 0.5s ease-in;
+}
+
+.slide-up {
+    animation: slideUp 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+@keyframes slideUp {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .header-content {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .features-grid {
+        grid-template-columns: 1fr;
+        padding: 20px;
+    }
+
+    .stats-dashboard {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .nav-links {
+        flex-direction: column;
+        align-items: center;
+        height: auto;
+    }
+
+    .nav-links li {
+        width: 100%;
+        text-align: center;
+    }
+
+    .nav-links li a {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+.notification {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: 5px;
+    color: white;
+    cursor: pointer;
+    animation: slideIn 0.3s ease-out;
+    z-index: 1000;
+}
+
+.notification.success { background-color: var(--success); }
+.notification.error { background-color: var(--danger); }
+.notification.info { background-color: var(--accent-primary); }
+
+@keyframes slideIn {
+    from { transform: translateX(100%); }
+    to { transform: translateX(0); }
+}
+
+/* Footer */
+footer {
+    background: var(--bg-secondary);
+    padding: 20px;
+    text-align: center;
+}
+
+footer p {
+    color: var(--text-secondary);
+}
+
+/* Result styling */
+.result {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.result.dangerous {
+    background-color: rgba(229, 57, 53, 0.1);
+    border: 1px solid var(--danger);
+}
+
+.result.safe {
+    background-color: rgba(67, 160, 71, 0.1);
+    border: 1px solid var(--success);
+}
+
+.result i {
+    font-size: 2rem;
+}
+
+.result.dangerous i {
+    color: var(--danger);
+}
+
+.result.safe i {
+    color: var(--success);
+}
+
+.share-my-calculation {
+    margin-top: 20px;
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    width: 100%;
+}
+
+.share-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: var(--text-primary);
+    margin-bottom: 15px;
+}
+
+/* Toggle Switch */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #ccc;
+    transition: .4s;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+}
+
+input:checked + .slider {
+    background-color: #ff7700;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+.slider.round {
+    border-radius: 34px;
+}
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+/* Share Buttons */
+.share-buttons {
+    display: flex;
+    gap: 15px;
+    margin-bottom: 15px;
+}
+
+.share-button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.share-button:hover {
+    transform: scale(1.1);
+}
+
+.share-button.facebook {
+    background-color: #3b5998;
+}
+
+.share-button.twitter {
+    background-color: #1da1f2;
+}
+
+.share-button.email {
+    background-color: #333;
+    border: 1px solid #cccccc;
+}
+
+/* Copy Button */
+.copy-button {
+    padding: 10px 30px;
+    border-radius: 5px;
+    background-color: #333333;
+    color: #ffffff;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.2s;
+    font-weight: bold;
+    align-self: flex-end;
+}
+
+.copy-button:hover {
+    background-color: #555555;
+}
+
+    </style>
+</head>
+<body>
+    <!-- Header with Theme Toggle - Fixed Position -->
+    <header>
+        <div class="header-content">
+            <div class="logo">
+                <i class="fas fa-shield-alt"></i>
+                <h1>NetShield Pro</h1>
+            </div>
+            <div class="header-controls">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Content wrapper with padding to accommodate fixed header -->
+    <div class="content-wrapper">
+        <!-- Navigation Bar - Now scrolls with page -->
+        <nav>
+            <ul class="nav-links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html" class="active">URL Detection</a></li>
+                <li><a href="email.html">Email Security</a></li>
+                <li><a href="steg.html">Steganography</a></li>
+                <li><a href="socio.html">Social Engg</a></li>
+                <li><a href="pass.html">Password Vault </a></li>
+                <li><a href="ssl.html">SSL/TLS </a></li>
+            </ul>
+        </nav>
+
+        <div class="hero">
+        <div class="overlay"></div>
+        <div class="gradient-border"></div>
+        <div class="hero-content">
+            <h1>PROACTIVELY DEFEND AGAINST CYBER THREATS WITH OUR INNOVATIVE DECOY-DRIVEN CYBER DECEPTION AND SYNERGIZED PHISHING PROTECTION SOLUTIONS</h1>
+        </div>
+    </div>
+
+        <!-- Main Features Grid -->
+        <div class="features-grid">
+            <div class="feature-card">
+                <i class="fas fa-search"></i>
+                <h3>URL Scanner</h3>
+                <p>Analyze suspicious URLs instantly</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-history"></i>
+                <h3>Scan History</h3>
+                <p>Track your previous scans</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-bar"></i>
+                <h3>Statistics</h3>
+                <p>View detailed threat analytics</p>
+            </div>
+        </div>
+
+        <!-- URL Scanner Section -->
+        <section class="scanner-section">
+            <div class="url-form">
+                <h3>Scan URL</h3>
+                <form id="urlScanForm">
+                    <input type="url" class="url-input" placeholder="Enter URL to analyze..." required>
+                    <button type="submit" class="scan-btn">
+                        <span>Analyze URL</span>
+                        <div class="loader"></div>
+                    </button>
+                </form>
+                <div id="scanResult" class="scan-result"></div>
+                <div class="share-my-calculation" style="display: none;">
+    <div class="share-title">Share my result</div>
+    
+    <!-- Toggle Switch -->
+    <div class="share-toggle" style="display: flex; align-items: center; margin-bottom: 15px;">
+        <label class="switch">
+            <input type="checkbox" id="shareToggle">
+            <span class="slider round" style="background-color: #ff7700;"></span>
+        </label>
+        <span style="margin-left: 10px; font-size: 16px;">share my result</span>
+    </div>
+    
+    <!-- Share Buttons -->
+    <div class="share-buttons">
+        <a class="share-button facebook" onclick="shareViaFacebook()">
+            <i class="fab fa-facebook-f" style="color: white;"></i>
+        </a>
+        <a class="share-button twitter" onclick="shareViaTwitter()">
+            <i class="fab fa-twitter" style="color: white;"></i>
+        </a>
+        <a class="share-button email" onclick="shareViaEmail()">
+            <i class="fas fa-envelope" style="color: white;"></i>
+        </a>
+    </div>
+    
+    <!-- Share Link -->
+    <div class="share-link-container" style="width: 100%; margin: 15px 0; padding: 15px; background-color: #f5f5f5; border-radius: 4px;">
+        <div id="shareLink" class="share-link">https://netshieldpro.com/scan/abc123</div> </div>
+        <div style="color: #666; font-size: 14px; margin-top: 8px;">
+            Everyone who receives the link will be able to view this result
+        </div>
+    
+    <!-- Copy Button -->
+    <button id="copyButton" class="copy-button" onclick="copyShareLink()">COPY</button>
+</div>
+            </div>
+        </section>
+
+        <!-- History Section -->
+        <section class="history-section" id="historySection">
+            <h3>Scan History</h3>
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Date</th>
+                        <th>URL</th>
+                        <th>Result</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody"></tbody>
+            </table>
+        </section>
+
+        <!-- Statistics Dashboard -->
+        <section class="stats-dashboard">
+            <div class="stat-card">
+                <h4>Total Scans</h4>
+                <div id="totalScans">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Threats Detected</h4>
+                <div id="threatsDetected">0</div>
+            </div>
+            <div class="stat-card">
+                <h4>Safe URLs</h4>
+                <div id="safeUrls">0</div>
+            </div>
+            <div class="stat-card">
+                <canvas id="threatChart"></canvas>
+            </div>
+        </section>
+
+        <footer>
+            <p>© 2025 NetShield Pro. All rights reserved.</p>
+        </footer>
+    </div>
+
+   <!-- Add Chart.js -->
+   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- JavaScript -->
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const root = document.documentElement;
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = root.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            root.setAttribute('data-theme', newTheme);
+            themeToggle.innerHTML = newTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // URL Scanner Functionality
+        const urlScanForm = document.getElementById('urlScanForm');
+        const scanResult = document.getElementById('scanResult');
+
+        urlScanForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const url = e.target.querySelector('input').value;
+
+    // Show loading state
+    scanResult.innerHTML = '<div class="loader"></div>';
+    
+    // Hide the share section while loading
+    document.querySelector('.share-my-calculation').style.display = 'none';
+
+    try {
+        // Send URL to Flask backend for prediction
+        const result = await analyzeUrl(url);
+        displayResult(result);
+        updateHistory(url, result);
+        updateStats(result);
+    } catch (error) {
+        scanResult.innerHTML = `<div class="error">Error: ${error.message}</div>`;
+    }
+});
+
+        async function analyzeUrl(url) {
+            try {
+                // Send a POST request to the Flask backend
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ url }),
+                });
+
+                if (!response.ok) {
+                    throw new Error('Failed to analyze URL');
+                }
+
+                const data = await response.json();
+                return data.result; // Return the prediction result from Flask
+            } catch (error) {
+                throw new Error('Failed to analyze URL');
+            }
+        }
+
+        function displayResult(result) {
+    const isPhishing = result.includes('Suspicious'); // Check if the result indicates phishing
+    const resultHtml = `
+        <div class="result ${isPhishing ? 'dangerous' : 'safe'}">
+            <i class="fas ${isPhishing ? 'fa-exclamation-triangle' : 'fa-check-circle'}"></i>
+            <h4>${result}</h4>
+        </div>
+    `;
+    scanResult.innerHTML = resultHtml;
+    
+    // Show the share section after a result is displayed
+    document.querySelector('.share-my-calculation').style.display = 'flex';
+}
+
+        // History Management
+        let scanHistory = JSON.parse(localStorage.getItem('scanHistory') || '[]');
+
+        function updateHistory(url, result) {
+            const scan = {
+                date: new Date().toISOString(),
+                url,
+                result
+            };
+            scanHistory.unshift(scan);
+            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+            updateHistoryTable();
+        }
+
+        function updateHistoryTable() {
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = scanHistory.map(scan => `
+                <tr>
+                    <td>${new Date(scan.date).toLocaleDateString()}</td>
+                    <td>${scan.url}</td>
+                    <td class="${scan.result.includes('Suspicious') ? 'dangerous' : 'safe'}">
+                        ${scan.result}
+                    </td>
+                    <td>
+                        <button onclick="rescan('${scan.url}')">Rescan</button>
+                        <button onclick="deleteFromHistory('${scan.date}')">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function rescan(url) {
+            document.getElementById('urlScanForm').querySelector('input').value = url;
+            urlScanForm.dispatchEvent(new Event('submit'));
+        }
+
+        function deleteFromHistory(date) {
+            scanHistory = scanHistory.filter(scan => scan.date !== date);
+            localStorage.setItem('scanHistory', JSON.stringify(scanHistory));
+            updateHistoryTable();
+        }
+
+        // Statistics and Charts
+        let stats = JSON.parse(localStorage.getItem('stats') || '{"total": 0, "threats": 0, "safe": 0}');
+
+        function updateStats(result) {
+            stats.total++;
+            if (result.includes('Suspicious')) {
+                stats.threats++;
+            } else {
+                stats.safe++;
+            }
+            localStorage.setItem('stats', JSON.stringify(stats));
+            updateStatsDisplay();
+            updateThreatChart();
+        }
+
+        function updateStatsDisplay() {
+            document.getElementById('totalScans').textContent = stats.total;
+            document.getElementById('threatsDetected').textContent = stats.threats;
+            document.getElementById('safeUrls').textContent = stats.safe;
+        }
+
+        function updateThreatChart() {
+            const ctx = document.getElementById('threatChart').getContext('2d');
+            if (window.threatChartInstance) {
+                window.threatChartInstance.destroy(); // Destroy existing chart instance
+            }
+            window.threatChartInstance = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Safe', 'Threats'],
+                    datasets: [{
+                        data: [stats.safe, stats.threats],
+                        backgroundColor: [
+                            'rgba(67, 160, 71, 0.8)', // Green for Safe
+                            'rgba(229, 57, 53, 0.8)' // Red for Threats
+                        ],
+                        borderColor: [
+                            'rgba(67, 160, 71, 1)', // Green border for Safe
+                            'rgba(229, 57, 53, 1)' // Red border for Threats
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'top',
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    let label = context.label || '';
+                                    if (label) {
+                                        label += ': ';
+                                    }
+                                    if (context.raw !== undefined) {
+                                        label += context.raw;
+                                    }
+                                    return label;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
+
+       // Share functionality
+function shareViaFacebook() {
+    const shareUrl = document.getElementById('shareLink').textContent;
+    const shareTitle = "Check my URL analysis results from NetShield Pro";
+    const facebookShareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(shareUrl)}&quote=${encodeURIComponent(shareTitle)}`;
+    window.open(facebookShareUrl, '_blank');
+}
+
+function shareViaTwitter() {
+    const shareUrl = document.getElementById('shareLink').textContent;
+    const shareText = "I just scanned a URL with NetShield Pro. Check out the results:";
+    const twitterShareUrl = `https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}&url=${encodeURIComponent(shareUrl)}`;
+    window.open(twitterShareUrl, '_blank');
+}
+
+function shareViaEmail() {
+    const shareUrl = document.getElementById('shareLink').textContent;
+    const subject = "URL Analysis Results from NetShield Pro";
+    const body = `Check out my URL analysis results from NetShield Pro:\n\n${shareUrl}`;
+    const mailtoUrl = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+    window.location.href = mailtoUrl;
+}
+
+function copyShareLink() {
+    const linkText = document.getElementById('shareLink').textContent;
+    navigator.clipboard.writeText(linkText)
+        .then(() => {
+            const copyButton = document.getElementById('copyButton');
+            const originalText = copyButton.textContent;
+            copyButton.textContent = "COPIED!";
+            setTimeout(() => {
+                copyButton.textContent = originalText;
+            }, 2000);
+        })
+        .catch(err => {
+            console.error('Failed to copy: ', err);
+            alert('Failed to copy link. Please try again.');
+        });
+}
+
+// Toggle sharing functionality
+document.getElementById('shareToggle').addEventListener('change', function() {
+    const shareElements = document.querySelectorAll('.share-buttons, .share-link-container, #copyButton');
+    
+    if (this.checked) {
+        shareElements.forEach(element => {
+            element.style.display = 'flex';
+        });
+        document.getElementById('copyButton').style.display = 'block';
+        
+        // Generate a new unique URL for sharing
+        const uniqueId = Math.random().toString(36).substring(2, 10);
+        document.getElementById('shareLink').textContent = `https://netshieldpro.com/scan/${uniqueId}`;
+    } else {
+        shareElements.forEach(element => {
+            element.style.display = 'none';
+        });
+    }
+});
+
+// Initialize share toggle state
+window.addEventListener('DOMContentLoaded', () => {
+    const shareToggle = document.getElementById('shareToggle');
+    const shareElements = document.querySelectorAll('.share-buttons, .share-link-container, #copyButton');
+    
+    // Default to disabled
+    shareToggle.checked = false;
+    shareElements.forEach(element => {
+        element.style.display = 'none';
+    });
+});
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize features
+            updateHistoryTable();
+            updateStatsDisplay();
+            updateThreatChart();
+            
+            // Load saved theme
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            root.setAttribute('data-theme', savedTheme);
+            themeToggle.innerHTML = savedTheme === 'light' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
+        });
+    </script>
+</body>
+</html>
